@@ -18,7 +18,11 @@ public class User {
     @NotNull
     private String email;
 
+    @NotNull
+    @NotBlank
+    private String password;
+
     private String pin;
 
-    //relationship profilee
+    //relationship profile
 }
