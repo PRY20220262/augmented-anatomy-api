@@ -20,5 +20,5 @@ public class User {
 
     private String pin;
 
-    //relationship profile
+    //relationship profilee
 }
