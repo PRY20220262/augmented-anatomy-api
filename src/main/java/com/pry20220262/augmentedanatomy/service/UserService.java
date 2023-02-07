@@ -5,4 +5,8 @@ import com.pry20220262.augmentedanatomy.resource.UserDto;
 
 public interface UserService {
     User findById(Long id);
+
+    User register(User user);
+
+
 }
