@@ -1,7 +1,6 @@
 package com.pry20220262.augmentedanatomy.model;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -25,4 +24,6 @@ public class User {
     private String pin;
 
     //relationship profile
+    @OneToOne(mappedBy = "user")
+    private Profile profile;
 }
