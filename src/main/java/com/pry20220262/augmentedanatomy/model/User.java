@@ -24,4 +24,6 @@ public class User {
     private String pin;
 
     //relationship profile
+    @OneToOne(mappedBy = "user")
+    private Profile profile;
 }
