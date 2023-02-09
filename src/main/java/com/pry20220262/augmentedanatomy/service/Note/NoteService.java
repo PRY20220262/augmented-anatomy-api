@@ -9,6 +9,6 @@ public interface NoteService {
     Note createNote(Long userId, Note note);
     Note getNoteById(Long noteId);
     Page<Note> getAllNotesByUserId(Long userId, Pageable pageable);
-    Note updateNote(Long noteId, Note note);
+    Note updateNote(Long userId, Long noteId, Note noteRequest);
     ResponseEntity<?> deleteNote(Long noteId);
 }
