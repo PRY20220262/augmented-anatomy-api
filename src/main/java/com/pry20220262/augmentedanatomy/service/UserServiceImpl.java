@@ -67,7 +67,11 @@ public class UserServiceImpl implements UserService {
         if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
 
         int randomPIN = (int)(Math.random()*9000)+1000;
+        User user = retrievedUser.get();
+        user.setPin(String.valueOf(randomPIN));
         System.out.println(randomPIN);
+
+        userRepository.save(user);
 
         return ResponseEntity.ok().build();
 
