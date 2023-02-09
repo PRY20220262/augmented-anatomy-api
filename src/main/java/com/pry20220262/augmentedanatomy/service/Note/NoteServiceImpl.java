@@ -35,8 +35,8 @@ public class NoteServiceImpl implements NoteService
     }
 
     @Override
-    public Page<Note> getAllNotes(Pageable pageable) {
-        return null;
+    public Page<Note> getAllNotesByUserId(Long userId, Pageable pageable) {
+        return noteRepository.findByUserId(userId, pageable);
     }
 
     @Override
