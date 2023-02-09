@@ -3,6 +3,7 @@ package com.pry20220262.augmentedanatomy.service.Note;
 
 import com.pry20220262.augmentedanatomy.exception.Error;
 import com.pry20220262.augmentedanatomy.exception.ServiceException;
+import com.pry20220262.augmentedanatomy.model.User;
 import com.pry20220262.augmentedanatomy.repository.NoteRepository;
 import com.pry20220262.augmentedanatomy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,13 @@ public class NoteServiceImpl implements NoteService
     }
 
     @Override
-    public Note updateNote(Long noteId, Note note) {
-        return null;
+    public Note updateNote(Long userId, Long noteId, Note noteRequest){
+        return userRepository.findById(userId).map(user -> {
+            Note note = noteRepository.findById(noteId).orElseThrow(()-> new ServiceException(Error.DATA_NOT_FOUND));
+            note.setTitle(noteRequest.getTitle());
+            note.setDetail(noteRequest.getDetail());
+            return noteRepository.save(note);
+        }).orElseThrow(() -> new ServiceException(Error.DATA_NOT_FOUND));
     }
 
     @Override

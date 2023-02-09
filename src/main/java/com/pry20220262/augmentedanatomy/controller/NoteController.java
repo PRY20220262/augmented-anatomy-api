@@ -34,7 +34,12 @@ public class NoteController {
         List<NoteResource> resources = coursePage.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
     }
-    
+
+    @PutMapping("/users/{userId}/notes/{noteId}")
+    public NoteResource updateNote(@PathVariable(name = "userId") Long userId, @PathVariable(name = "noteId") Long noteId, @Valid @RequestBody SaveNoteResource resource) {
+        return convertToResource(noteService.updateNote(userId, noteId, convertToEntity(resource)));
+    }
+
     private Note convertToEntity(SaveNoteResource resource){
         return mapper.map(resource, Note.class);
     }
