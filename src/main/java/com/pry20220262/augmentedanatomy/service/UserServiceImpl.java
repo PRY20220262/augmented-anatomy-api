@@ -4,15 +4,19 @@ import com.pry20220262.augmentedanatomy.exception.Error;
 import com.pry20220262.augmentedanatomy.exception.ServiceException;
 import com.pry20220262.augmentedanatomy.model.User;
 import com.pry20220262.augmentedanatomy.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User findById(Long id) {
@@ -22,7 +26,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User register(User user) {
         if (user.getId() != null) throw new IllegalArgumentException("Body should not contain id");
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 

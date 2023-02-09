@@ -13,7 +13,7 @@ public class JwtUtil {
 
         String token = Jwts.builder()
                 .setSubject(username)
-
+                .claim("email", username)
                 .signWith(SignatureAlgorithm.HS512, "AugmentedAnatomySecret")
                 .compact();
 
