@@ -1,7 +1,5 @@
 package com.pry20220262.augmentedanatomy.controller;
 
-import com.pry20220262.augmentedanatomy.exception.Error;
-import com.pry20220262.augmentedanatomy.exception.InvalidDataException;
 import com.pry20220262.augmentedanatomy.exception.RestExceptionHandler;
 import com.pry20220262.augmentedanatomy.model.User;
 import com.pry20220262.augmentedanatomy.resource.User.UserSaveResource;
@@ -9,9 +7,6 @@ import com.pry20220262.augmentedanatomy.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

@@ -39,7 +39,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(UserSaveResource userSaveResource) {
-        logger.error("POR QUE ENTRA CARAJO");
         Optional<User> retrievedUser = userRepository.findByEmail(userSaveResource.getEmail());
         if (retrievedUser.isPresent()) throw new ServiceException(Error.USER_EXISTS);
 
