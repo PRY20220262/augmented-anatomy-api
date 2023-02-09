@@ -6,16 +6,9 @@ import com.pry20220262.augmentedanatomy.resource.SaveNoteResource;
 import com.pry20220262.augmentedanatomy.service.Note.NoteService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class NoteController {
     @Autowired
@@ -23,11 +16,9 @@ public class NoteController {
 
     @Autowired
     ModelMapper mapper;
-
-    @PostMapping("/notes")
-    public NoteResource createNote(@Valid @RequestBody SaveNoteResource resource){
-        Note note = convertToEntity(resource);
-        return convertToResource(noteService.createNote(note));
+    @PostMapping("/users/{userId}/notes")
+    public NoteResource createNote(@PathVariable(name = "userId") Long userId, @Valid @RequestBody SaveNoteResource resource) {
+        return convertToResource(noteService.createNote(userId, convertToEntity(resource)));
     }
 
     private Note convertToEntity(SaveNoteResource resource){
