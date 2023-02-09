@@ -4,7 +4,8 @@ public enum Error {
 
     INVALID_DATA(1001, "Invalid Data"),
     USER_NOT_FOUND(1002, "User not found :("),
-    DATA_NOT_FOUND(900, "Data not found it, try later")
+    DATA_NOT_FOUND(900, "Data not found it, try later"),
+    USER_EXISTS(1003, "El usuario ingresado ya existe. Intente nuevamente"),
     ;
 
     private final int codError;

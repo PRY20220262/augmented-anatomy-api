@@ -1,4 +1,4 @@
-package com.pry20220262.augmentedanatomy.resource;
+package com.pry20220262.augmentedanatomy.resource.User;
 
 import lombok.Data;
 import javax.validation.constraints.NotBlank;
@@ -13,4 +13,16 @@ public class UserSaveResource {
     @NotNull(message = "Password cannot be null")
     @NotBlank(message = "Password cannot be null")
     private String password;
+
+    @NotNull(message = "Phone cannot be null")
+    @NotBlank(message = "Phone cannot be null")
+    private String phone;
+
+    @NotNull(message = "FullName cannot be null")
+    @NotBlank(message = "FullName cannot be null")
+    private String fullName;
+
+    private Boolean isStudent;
+
+
 }

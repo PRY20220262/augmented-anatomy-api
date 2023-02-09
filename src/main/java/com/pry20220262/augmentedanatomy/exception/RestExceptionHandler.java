@@ -27,7 +27,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler
   protected ResponseEntity<ErrorResponse> handleException(InvalidDataException exc) {
-    logger.error(exc.toString(), exc);
+    logger.error(String.valueOf(exc.getResult().getAllErrors()), exc);
     HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
     ServiceException sexc = new ServiceException(exc.getError());
 
