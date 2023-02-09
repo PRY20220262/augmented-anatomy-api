@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -57,6 +59,18 @@ public class UserServiceImpl implements UserService {
         profileRepository.save(profile);
 
         return user;
+    }
+
+    @Override
+    public ResponseEntity<?> generatePin(String email) {
+        Optional<User> retrievedUser = userRepository.findByEmail(email);
+        if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
+
+        int randomPIN = (int)(Math.random()*9000)+1000;
+        System.out.println(randomPIN);
+
+        return ResponseEntity.ok().build();
+
     }
 
 
