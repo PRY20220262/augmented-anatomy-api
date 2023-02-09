@@ -2,6 +2,7 @@ package com.pry20220262.augmentedanatomy.controller;
 
 import com.pry20220262.augmentedanatomy.exception.RestExceptionHandler;
 import com.pry20220262.augmentedanatomy.model.User;
+import com.pry20220262.augmentedanatomy.resource.User.ChangePasswordResource;
 import com.pry20220262.augmentedanatomy.resource.User.UserSaveResource;
 import com.pry20220262.augmentedanatomy.service.UserService;
 import org.slf4j.Logger;
@@ -30,6 +31,13 @@ public class AuthController {
     public ResponseEntity<?> request(@PathVariable(name = "email") String email) {
 
         return userService.generatePin(email);
+
+    }
+
+    @PostMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@Valid @RequestBody ChangePasswordResource changePasswordResource) {
+        logger.info("Realizando post /update-password");
+        return userService.updatePassword(changePasswordResource);
 
     }
 }

@@ -7,6 +7,7 @@ import com.pry20220262.augmentedanatomy.model.Profile;
 import com.pry20220262.augmentedanatomy.model.User;
 import com.pry20220262.augmentedanatomy.repository.ProfileRepository;
 import com.pry20220262.augmentedanatomy.repository.UserRepository;
+import com.pry20220262.augmentedanatomy.resource.User.ChangePasswordResource;
 import com.pry20220262.augmentedanatomy.resource.User.UserSaveResource;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -66,7 +67,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> retrievedUser = userRepository.findByEmail(email);
         if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
 
-        int randomPIN = (int)(Math.random()*9000)+1000;
+        int randomPIN = (int) (Math.random() * 9000) + 1000;
         User user = retrievedUser.get();
         user.setPin(String.valueOf(randomPIN));
         System.out.println(randomPIN);
@@ -75,6 +76,19 @@ public class UserServiceImpl implements UserService {
 
         return ResponseEntity.ok().build();
 
+    }
+
+    @Override
+    public ResponseEntity<?> updatePassword(ChangePasswordResource changePasswordResource) {
+        Optional<User> retrievedUser = userRepository.findByEmail(changePasswordResource.getEmail());
+        if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
+
+        User user = retrievedUser.get();
+        user.setPassword(passwordEncoder.encode(changePasswordResource.getNewPassword()));
+        user.setPin(null);
+        userRepository.save(user);
+
+        return ResponseEntity.ok().build();
     }
 
 
