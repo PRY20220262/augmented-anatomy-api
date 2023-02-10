@@ -14,4 +14,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = QUERY_FIND_BY_EMAIL)
     Optional<User> findByEmail(@Param("email") String email);
 
+    String QUERY_FIND_BY_PIN = "SELECT u FROM User u WHERE u.pin = :pin ";
+    @Query(value = QUERY_FIND_BY_PIN)
+    Optional<User> findByPin(@Param("pin") String pin);
+
 }
