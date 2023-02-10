@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,7 @@ public class NoteController {
     }
 
     @GetMapping("/users/{userId}/notes")
-    public Page<NoteResource> getAllCoursesByUserId(@PathVariable(name = "userId") Long userId, Pageable pageable) {
+    public Page<NoteResource> getAllNotesByUserId(@PathVariable(name = "userId") Long userId, Pageable pageable) {
         Page<Note> coursePage = noteService.getAllNotesByUserId(userId, pageable);
         List<NoteResource> resources = coursePage.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
@@ -38,6 +39,11 @@ public class NoteController {
     @PutMapping("/users/{userId}/notes/{noteId}")
     public NoteResource updateNote(@PathVariable(name = "userId") Long userId, @PathVariable(name = "noteId") Long noteId, @Valid @RequestBody SaveNoteResource resource) {
         return convertToResource(noteService.updateNote(userId, noteId, convertToEntity(resource)));
+    }
+
+    @DeleteMapping("/users/{userId}/notes/{noteId}")
+    public ResponseEntity<?> deleteNote(@PathVariable(name = "userId") Long userId, @PathVariable(name = "noteId") Long noteId) {
+        return noteService.deleteNote(userId, noteId);
     }
 
     private Note convertToEntity(SaveNoteResource resource){

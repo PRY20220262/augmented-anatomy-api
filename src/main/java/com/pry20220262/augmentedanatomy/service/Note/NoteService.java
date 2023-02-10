@@ -10,5 +10,5 @@ public interface NoteService {
     Note getNoteById(Long noteId);
     Page<Note> getAllNotesByUserId(Long userId, Pageable pageable);
     Note updateNote(Long userId, Long noteId, Note noteRequest);
-    ResponseEntity<?> deleteNote(Long noteId);
+    ResponseEntity<?> deleteNote(Long userId, Long noteId);
 }
