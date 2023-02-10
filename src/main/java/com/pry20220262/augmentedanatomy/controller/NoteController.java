@@ -1,8 +1,8 @@
 package com.pry20220262.augmentedanatomy.controller;
 
 import com.pry20220262.augmentedanatomy.model.Note;
-import com.pry20220262.augmentedanatomy.resource.NoteResource;
-import com.pry20220262.augmentedanatomy.resource.SaveNoteResource;
+import com.pry20220262.augmentedanatomy.resource.Note.NoteResource;
+import com.pry20220262.augmentedanatomy.resource.Note.SaveNoteResource;
 import com.pry20220262.augmentedanatomy.service.Note.NoteService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

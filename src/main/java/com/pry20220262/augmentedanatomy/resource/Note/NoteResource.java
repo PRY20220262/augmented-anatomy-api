@@ -1,4 +1,4 @@
-package com.pry20220262.augmentedanatomy.resource;
+package com.pry20220262.augmentedanatomy.resource.Note;
 
 import lombok.Data;
 
