@@ -51,7 +51,10 @@ public class NoteServiceImpl implements NoteService
     }
 
     @Override
-    public ResponseEntity<?> deleteNote(Long noteId) {
-        return null;
+    public ResponseEntity<?> deleteNote(Long userId, Long noteId) {
+        return noteRepository.findByIdAndUserId(noteId, userId).map(note ->{
+            noteRepository.delete(note);
+            return ResponseEntity.ok().build();
+        }).orElseThrow(() -> new ServiceException(Error.DATA_NOT_FOUND));
     }
 }
