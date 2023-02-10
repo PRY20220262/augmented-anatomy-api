@@ -3,6 +3,7 @@ package com.pry20220262.augmentedanatomy.controller;
 import com.pry20220262.augmentedanatomy.exception.RestExceptionHandler;
 import com.pry20220262.augmentedanatomy.model.User;
 import com.pry20220262.augmentedanatomy.resource.User.ChangePasswordResource;
+import com.pry20220262.augmentedanatomy.resource.User.UserPinResource;
 import com.pry20220262.augmentedanatomy.resource.User.UserSaveResource;
 import com.pry20220262.augmentedanatomy.service.UserService;
 import org.slf4j.Logger;
@@ -28,9 +29,16 @@ public class AuthController {
     }
 
     @PostMapping("/request-pin/{email}")
-    public ResponseEntity<?> request(@PathVariable(name = "email") String email) {
+    public ResponseEntity<?> requestPin(@PathVariable(name = "email") String email) {
 
         return userService.generatePin(email);
+
+    }
+
+    @PostMapping("/validate-pin")
+    public ResponseEntity<?> validatePin(@Valid @RequestBody UserPinResource userPinResource) {
+        logger.info("Realizando post /validate-pin");
+        return userService.validatePin(userPinResource);
 
     }
 

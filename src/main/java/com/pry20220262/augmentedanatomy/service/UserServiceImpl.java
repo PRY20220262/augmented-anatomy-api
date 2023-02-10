@@ -8,16 +8,19 @@ import com.pry20220262.augmentedanatomy.model.User;
 import com.pry20220262.augmentedanatomy.repository.ProfileRepository;
 import com.pry20220262.augmentedanatomy.repository.UserRepository;
 import com.pry20220262.augmentedanatomy.resource.User.ChangePasswordResource;
+import com.pry20220262.augmentedanatomy.resource.User.UserPinResource;
 import com.pry20220262.augmentedanatomy.resource.User.UserSaveResource;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -31,6 +34,9 @@ public class UserServiceImpl implements UserService {
     private ProfileRepository profileRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JavaMailSender emailSender;
 
     private static final Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
 
@@ -74,15 +80,28 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("augmentedanatomyupc@gmail.com");
+        message.setTo(email);
+        message.setSubject("PIN Generado Augmented Anatomy");
+        message.setText("Se ha generado correctamente el PIN: " + randomPIN);
+
+        emailSender.send(message);
+
         return ResponseEntity.ok().build();
 
     }
 
     @Override
-    public User getByPin(String pin) {
-        Optional<User> retrievedUser = userRepository.findByPin(pin);
+    public ResponseEntity<?> validatePin(UserPinResource userPinResource) {
+        Optional<User> retrievedUser = userRepository.findByPin(userPinResource.getPin());
         if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
-        return retrievedUser.get();
+        User user = retrievedUser.get();
+        if (!Objects.equals(user.getEmail(), userPinResource.getEmail())) throw new ServiceException(Error.USER_PIN_NOT_MATCH);
+        user.setPin(null);
+        userRepository.save(user);
+
+        return ResponseEntity.ok().build();
     }
 
     @Override
