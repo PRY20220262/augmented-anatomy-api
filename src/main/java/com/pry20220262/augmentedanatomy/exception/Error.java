@@ -7,6 +7,7 @@ public enum Error {
     DATA_NOT_FOUND(900, "Data not found it, try later"),
     USER_EXISTS(1003, "El usuario ingresado ya existe. Intente nuevamente"),
     USER_PIN_NOT_MATCH(1003, "El pin ingresado no pertenece al usuario"),
+    INVALID_OLD_PASSWORD(1003, "El password anterior, no pertenece al usuario"),
     ;
 
     private final int codError;

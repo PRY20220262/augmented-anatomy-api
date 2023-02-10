@@ -7,6 +7,7 @@ import com.pry20220262.augmentedanatomy.model.Profile;
 import com.pry20220262.augmentedanatomy.model.User;
 import com.pry20220262.augmentedanatomy.repository.ProfileRepository;
 import com.pry20220262.augmentedanatomy.repository.UserRepository;
+import com.pry20220262.augmentedanatomy.resource.User.ChangeOwnPasswordResource;
 import com.pry20220262.augmentedanatomy.resource.User.ChangePasswordResource;
 import com.pry20220262.augmentedanatomy.resource.User.UserPinResource;
 import com.pry20220262.augmentedanatomy.resource.User.UserSaveResource;
@@ -16,10 +17,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -46,6 +49,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(() -> new ServiceException(Error.USER_NOT_FOUND));
     }
 
+    private User finByEmail(String email) {
+        Optional<User> retrievedUser = userRepository.findByEmail(email);
+        if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
+        return retrievedUser.get();
+    }
+
     @Override
     public User register(UserSaveResource userSaveResource) {
         Optional<User> retrievedUser = userRepository.findByEmail(userSaveResource.getEmail());
@@ -70,13 +79,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> generatePin(String email) {
-        Optional<User> retrievedUser = userRepository.findByEmail(email);
-        if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
 
+        User user = finByEmail(email);
         int randomPIN = (int) (Math.random() * 9000) + 1000;
-        User user = retrievedUser.get();
+
         user.setPin(String.valueOf(randomPIN));
-        System.out.println(randomPIN);
 
         userRepository.save(user);
 
@@ -97,7 +104,8 @@ public class UserServiceImpl implements UserService {
         Optional<User> retrievedUser = userRepository.findByPin(userPinResource.getPin());
         if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
         User user = retrievedUser.get();
-        if (!Objects.equals(user.getEmail(), userPinResource.getEmail())) throw new ServiceException(Error.USER_PIN_NOT_MATCH);
+        if (!Objects.equals(user.getEmail(), userPinResource.getEmail()))
+            throw new ServiceException(Error.USER_PIN_NOT_MATCH);
         user.setPin(null);
         userRepository.save(user);
 
@@ -106,15 +114,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> updatePassword(ChangePasswordResource changePasswordResource) {
-        Optional<User> retrievedUser = userRepository.findByEmail(changePasswordResource.getEmail());
-        if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
+        User user = finByEmail(changePasswordResource.getEmail());
 
-        User user = retrievedUser.get();
         user.setPassword(passwordEncoder.encode(changePasswordResource.getNewPassword()));
         user.setPin(null);
         userRepository.save(user);
 
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<?> changeOwnPassword(ChangeOwnPasswordResource changePasswordResource) {
+        User user = finByEmail(
+                SecurityContextHolder.getContext().getAuthentication().getName());
+
+        if (!passwordEncoder.matches(changePasswordResource.getOldPassword(), user.getPassword()))
+            throw new ServiceException(Error.INVALID_OLD_PASSWORD);
+
+        updatePassword(ChangePasswordResource.builder().newPassword(changePasswordResource.getNewPassword()).email(user.getEmail()).build());
+
+        return ResponseEntity.ok().build();
+
     }
 
 

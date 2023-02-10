@@ -1,17 +1,15 @@
 package com.pry20220262.augmentedanatomy.resource.User;
 
-import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-@Builder
-public class ChangePasswordResource {
+public class ChangeOwnPasswordResource {
     @NotNull(message = "Email cannot be null")
     @NotBlank(message = "Email cannot be null")
-    private String email;
+    private String oldPassword;
     @NotNull(message = "Password cannot be null")
     @NotBlank(message = "Password cannot be null")
     private String newPassword;
