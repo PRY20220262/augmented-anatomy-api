@@ -10,6 +10,7 @@ public interface UserService {
     User register(UserSaveResource user);
     //podriamos retornar el usuario
     ResponseEntity<?> generatePin(String email);
+    User getByPin(String pin);
     ResponseEntity<?> updatePassword(ChangePasswordResource changePasswordResource);
 
 }

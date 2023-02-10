@@ -79,6 +79,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getByPin(String pin) {
+        Optional<User> retrievedUser = userRepository.findByPin(pin);
+        if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
+        return retrievedUser.get();
+    }
+
+    @Override
     public ResponseEntity<?> updatePassword(ChangePasswordResource changePasswordResource) {
         Optional<User> retrievedUser = userRepository.findByEmail(changePasswordResource.getEmail());
         if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
