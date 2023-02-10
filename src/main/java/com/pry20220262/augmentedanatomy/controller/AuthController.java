@@ -2,6 +2,7 @@ package com.pry20220262.augmentedanatomy.controller;
 
 import com.pry20220262.augmentedanatomy.exception.RestExceptionHandler;
 import com.pry20220262.augmentedanatomy.model.User;
+import com.pry20220262.augmentedanatomy.resource.User.ChangeOwnPasswordResource;
 import com.pry20220262.augmentedanatomy.resource.User.ChangePasswordResource;
 import com.pry20220262.augmentedanatomy.resource.User.UserPinResource;
 import com.pry20220262.augmentedanatomy.resource.User.UserSaveResource;
@@ -46,6 +47,11 @@ public class AuthController {
     public ResponseEntity<?> updatePassword(@Valid @RequestBody ChangePasswordResource changePasswordResource) {
         logger.info("Realizando post /update-password");
         return userService.updatePassword(changePasswordResource);
+    }
 
+    @PostMapping("/change-own-password")
+    public ResponseEntity<?> changeOwnPassword(@Valid @RequestBody ChangeOwnPasswordResource changePasswordResource) {
+        logger.info("Realizando post /change-own-password");
+        return userService.changeOwnPassword(changePasswordResource);
     }
 }

@@ -1,6 +1,7 @@
 package com.pry20220262.augmentedanatomy.service;
 
 import com.pry20220262.augmentedanatomy.model.User;
+import com.pry20220262.augmentedanatomy.resource.User.ChangeOwnPasswordResource;
 import com.pry20220262.augmentedanatomy.resource.User.ChangePasswordResource;
 import com.pry20220262.augmentedanatomy.resource.User.UserPinResource;
 import org.springframework.http.ResponseEntity;
@@ -13,5 +14,7 @@ public interface UserService {
     ResponseEntity<?> generatePin(String email);
     ResponseEntity<?> validatePin(UserPinResource userPinResource);
     ResponseEntity<?> updatePassword(ChangePasswordResource changePasswordResource);
+
+    ResponseEntity<?> changeOwnPassword(ChangeOwnPasswordResource changePasswordResource);
 
 }
