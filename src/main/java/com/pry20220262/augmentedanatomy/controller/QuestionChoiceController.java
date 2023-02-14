@@ -6,12 +6,14 @@ import com.pry20220262.augmentedanatomy.resource.QuestionChoice.SaveQuestionChoi
 import com.pry20220262.augmentedanatomy.service.QuestionChoice.QuestionChoiceSerivce;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class QuestionChoiceController {
@@ -25,6 +27,13 @@ public class QuestionChoiceController {
     @PostMapping("/questions/{questionId}/questions-choice")
     public QuestionChoiceResource createQuestionChoice(@PathVariable(name = "questionId") Long questionId, @Valid @RequestBody SaveQuestionChoiceResource resource) {
         return convertToResource(questionChoiceSerivce.createQuestionChoice(questionId, convertToEntity(resource)));
+    }
+
+    @GetMapping("/questions/{questionId}/questions-choice")
+    public Page<QuestionChoiceResource> getAllQuestionChoiceByQuestionId(@PathVariable(name = "questionId") Long questionId, Pageable pageable) {
+        Page<QuestionChoice> questionChoiceePage = questionChoiceSerivce.getAllQuestionsChoicebyQuestionId(questionId, pageable);
+        List<QuestionChoiceResource> resources = questionChoiceePage.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
+        return new PageImpl<>(resources, pageable, resources.size());
     }
 
     private QuestionChoice convertToEntity(SaveQuestionChoiceResource resource){
