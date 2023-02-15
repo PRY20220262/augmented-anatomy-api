@@ -1,5 +1,9 @@
 package com.pry20220262.augmentedanatomy.service;
 
+import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.blob.CloudBlob;
+import com.microsoft.azure.storage.blob.CloudBlobClient;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.pry20220262.augmentedanatomy.exception.Error;
 import com.pry20220262.augmentedanatomy.exception.RestExceptionHandler;
 import com.pry20220262.augmentedanatomy.exception.ServiceException;
@@ -7,14 +11,12 @@ import com.pry20220262.augmentedanatomy.model.Profile;
 import com.pry20220262.augmentedanatomy.model.User;
 import com.pry20220262.augmentedanatomy.repository.ProfileRepository;
 import com.pry20220262.augmentedanatomy.repository.UserRepository;
-import com.pry20220262.augmentedanatomy.resource.User.ChangeOwnPasswordResource;
-import com.pry20220262.augmentedanatomy.resource.User.ChangePasswordResource;
-import com.pry20220262.augmentedanatomy.resource.User.UserPinResource;
-import com.pry20220262.augmentedanatomy.resource.User.UserSaveResource;
+import com.pry20220262.augmentedanatomy.resource.User.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -40,6 +43,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private JavaMailSender emailSender;
+
+    @Value("${azure.blob.key}")
+    private String storageConnectionAzure;
 
     private static final Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
 
@@ -135,6 +141,30 @@ public class UserServiceImpl implements UserService {
 
         return ResponseEntity.ok().build();
 
+    }
+
+    @Override
+    public String uploadProfilePhoto(UploadPhotoResource uploadPhotoResource, Long id) {
+        String resultService;
+        String nameContainer = "users";
+
+        try {
+            CloudStorageAccount account = CloudStorageAccount.parse(storageConnectionAzure);
+            CloudBlobClient serviceClient = account.createCloudBlobClient();
+            CloudBlobContainer container = serviceClient.getContainerReference(nameContainer);
+
+            CloudBlob blob;
+            blob = container.getBlockBlobReference(uploadPhotoResource.getName());
+            byte[] decodedBytes = Base64.getDecoder().decode(uploadPhotoResource.getFileBase64());
+            blob.uploadFromByteArray(decodedBytes, 0, decodedBytes.length);
+            logger.error(blob.getUri().toString());
+
+            resultService = "OK";
+        } catch (Exception e) {
+            resultService = e.getMessage();
+        }
+
+        return resultService;
     }
 
 
