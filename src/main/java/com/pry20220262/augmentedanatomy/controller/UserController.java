@@ -21,8 +21,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}/upload-file")
-    public ResponseEntity<String> uploadProfilePhoto(@PathVariable(name = "id") Long id, @RequestBody UploadPhotoResource uploadPhotoResource) {
-        String resultService = userService.uploadProfilePhoto(uploadPhotoResource, id);
-        return new ResponseEntity<>("ok", HttpStatus.OK);
+    public ResponseEntity<?> uploadProfilePhoto(@PathVariable(name = "id") Long id, @RequestBody UploadPhotoResource uploadPhotoResource) {
+        return userService.uploadProfilePhoto(uploadPhotoResource, id);
     }
 }

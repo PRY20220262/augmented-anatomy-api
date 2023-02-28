@@ -12,6 +12,6 @@ public interface UserService {
     ResponseEntity<?> validatePin(UserPinResource userPinResource);
     ResponseEntity<?> updatePassword(ChangePasswordResource changePasswordResource);
     ResponseEntity<?> changeOwnPassword(ChangeOwnPasswordResource changePasswordResource);
-    String uploadProfilePhoto(UploadPhotoResource uploadPhotoResource, Long id);
+    ResponseEntity<?> uploadProfilePhoto(UploadPhotoResource uploadPhotoResource, Long id);
 
 }

@@ -144,8 +144,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String uploadProfilePhoto(UploadPhotoResource uploadPhotoResource, Long id) {
-        String resultService;
+    public ResponseEntity<?> uploadProfilePhoto(UploadPhotoResource uploadPhotoResource, Long id) {
+
+        Profile userProfile = findById(id).getProfile();
+        String photoUrl = uploadToCloud(uploadPhotoResource);
+
+        if (!Objects.equals(photoUrl, "")) {
+            userProfile.setPhotoUrl(photoUrl);
+            profileRepository.save(userProfile);
+        } else {
+            throw new ServiceException(Error.PHOTO_NOT_UPLOADED);
+        }
+
+        return ResponseEntity.ok().build();
+
+    }
+
+    private String uploadToCloud(UploadPhotoResource uploadPhotoResource) {
+        String photoUrl = "";
         String nameContainer = "users";
 
         try {
@@ -159,12 +175,13 @@ public class UserServiceImpl implements UserService {
             blob.uploadFromByteArray(decodedBytes, 0, decodedBytes.length);
             logger.error(blob.getUri().toString());
 
-            resultService = "OK";
+            photoUrl = blob.getUri().toString();
         } catch (Exception e) {
-            resultService = e.getMessage();
+            logger.error(e.getMessage());
         }
 
-        return resultService;
+
+        return photoUrl;
     }
 
 
