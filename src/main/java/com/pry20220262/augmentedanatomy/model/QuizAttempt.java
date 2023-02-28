@@ -6,32 +6,31 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "question_choices")
-public class QuestionChoice {
+@Table(name = "quiz_attempts")
+public class QuizAttempt {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @NotNull
-    private String choice;
-
-    @NotNull
-    private Boolean isCorrect;
+    private Double score;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "question_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private Question question;
+    private User user;
 
-    @ManyToMany(mappedBy = "quizAnswers")
-    Set<QuizAttempt> quizeAttempt;
+    @ManyToMany
+    @JoinTable(
+            name = "quiz_answer",
+            joinColumns = @JoinColumn(name = "quiz_attempt_id"),
+            inverseJoinColumns = @JoinColumn(name = "question_choice_id"))
+    Set<QuestionChoice> quizAnswers;
 
 }
