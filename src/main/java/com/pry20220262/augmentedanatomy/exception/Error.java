@@ -8,6 +8,7 @@ public enum Error {
     USER_EXISTS(1003, "El usuario ingresado ya existe. Intente nuevamente"),
     USER_PIN_NOT_MATCH(1003, "El pin ingresado no pertenece al usuario"),
     INVALID_OLD_PASSWORD(1003, "El password anterior, no pertenece al usuario"),
+    PHOTO_NOT_UPLOADED(1003, "La foto de perfil no se pudo cargar"),
     ;
 
     private final int codError;
