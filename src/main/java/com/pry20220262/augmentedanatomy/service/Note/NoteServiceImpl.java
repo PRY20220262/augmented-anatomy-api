@@ -26,7 +26,6 @@ public class NoteServiceImpl implements NoteService
             note.setUser(user);
             return noteRepository.save(note);
         }).orElseThrow(() -> new ServiceException(Error.DATA_NOT_FOUND));
-
     }
 
     @Override

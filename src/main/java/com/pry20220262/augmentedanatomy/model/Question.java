@@ -22,4 +22,11 @@ public class Question {
     @NotBlank
     @NotNull
     private String title;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "human_anatomy_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private HumanAnatomy humanAnatomy;
+
 }

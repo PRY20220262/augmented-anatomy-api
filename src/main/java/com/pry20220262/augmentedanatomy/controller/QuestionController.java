@@ -1,6 +1,9 @@
 package com.pry20220262.augmentedanatomy.controller;
 
+import com.pry20220262.augmentedanatomy.model.Note;
 import com.pry20220262.augmentedanatomy.model.Question;
+import com.pry20220262.augmentedanatomy.resource.Note.NoteResource;
+import com.pry20220262.augmentedanatomy.resource.Note.SaveNoteResource;
 import com.pry20220262.augmentedanatomy.resource.Question.QuestionResource;
 import com.pry20220262.augmentedanatomy.resource.Question.SaveQuestionResource;
 import com.pry20220262.augmentedanatomy.service.Question.QuestionService;
@@ -9,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -27,17 +27,21 @@ public class QuestionController {
     @Autowired
     ModelMapper mapper;
 
-    @PostMapping("questions")
-    public QuestionResource createQuestion(@Valid @RequestBody SaveQuestionResource resource)  {
-        Question question = convertToEntity(resource);
-        return convertToResource(questionService.createQuestion(question));
+    @PostMapping("humanAnatomy/{humanAnatomyId}/questions")
+    public QuestionResource createQuestion(@PathVariable(name = "humanAnatomyId") Long humanAnatomyId, @Valid @RequestBody SaveQuestionResource resource) {
+        return convertToResource(questionService.createQuestion(humanAnatomyId, convertToEntity(resource)));
     }
 
-    @GetMapping("/questions")
+    @GetMapping("questions")
     public Page<QuestionResource> getAllQuestions(Pageable pageable) {
         Page<Question> customerPage = questionService.getAllQuestions(pageable);
         List<QuestionResource> resources = customerPage.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
+    }
+
+    @GetMapping("/humanAnatomy/{humanAnatomyId}/questions")
+    public List<Question> getAllQuestionsByHumanAnatomyId(@PathVariable(name = "humanAnatomyId") Long humanAnatomyId) {
+        return questionService.getAllQuestionsByHumanAnatomy(humanAnatomyId);
     }
 
     private Question convertToEntity(SaveQuestionResource resource){
