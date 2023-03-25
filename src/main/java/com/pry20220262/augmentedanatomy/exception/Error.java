@@ -9,6 +9,7 @@ public enum Error {
     USER_PIN_NOT_MATCH(1003, "El pin ingresado no pertenece al usuario"),
     INVALID_OLD_PASSWORD(1003, "El password anterior, no pertenece al usuario"),
     PHOTO_NOT_UPLOADED(1003, "La foto de perfil no se pudo cargar"),
+    LIST_IS_EMPTY(1003, "No se han encontrado datos :("),
     ;
 
     private final int codError;
