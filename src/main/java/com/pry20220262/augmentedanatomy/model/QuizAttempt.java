@@ -26,11 +26,4 @@ public class QuizAttempt {
     @JsonIgnore
     private User user;
 
-    @ManyToMany
-    @JoinTable(
-            name = "quiz_answer",
-            joinColumns = @JoinColumn(name = "quiz_attempt_id"),
-            inverseJoinColumns = @JoinColumn(name = "question_choice_id"))
-    Set<QuestionChoice> quizAnswers;
-
 }

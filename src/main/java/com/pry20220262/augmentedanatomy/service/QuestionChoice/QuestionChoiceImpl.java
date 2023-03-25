@@ -2,7 +2,6 @@ package com.pry20220262.augmentedanatomy.service.QuestionChoice;
 
 import com.pry20220262.augmentedanatomy.exception.Error;
 import com.pry20220262.augmentedanatomy.exception.ServiceException;
-import com.pry20220262.augmentedanatomy.model.Question;
 import com.pry20220262.augmentedanatomy.model.QuestionChoice;
 import com.pry20220262.augmentedanatomy.repository.QuestionChoiceRepository;
 import com.pry20220262.augmentedanatomy.repository.QuestionRepository;

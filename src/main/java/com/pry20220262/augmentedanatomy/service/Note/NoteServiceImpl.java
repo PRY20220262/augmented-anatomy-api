@@ -3,7 +3,6 @@ package com.pry20220262.augmentedanatomy.service.Note;
 
 import com.pry20220262.augmentedanatomy.exception.Error;
 import com.pry20220262.augmentedanatomy.exception.ServiceException;
-import com.pry20220262.augmentedanatomy.model.User;
 import com.pry20220262.augmentedanatomy.repository.NoteRepository;
 import com.pry20220262.augmentedanatomy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

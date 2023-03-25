@@ -31,7 +31,4 @@ public class QuestionChoice {
     @JsonIgnore
     private Question question;
 
-    @ManyToMany(mappedBy = "quizAnswers")
-    Set<QuizAttempt> quizeAttempt;
-
 }
