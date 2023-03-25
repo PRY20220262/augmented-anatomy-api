@@ -40,7 +40,7 @@ public class QuestionController {
     }
 
     @GetMapping("/humanAnatomy/{humanAnatomyId}/questions")
-    public List<Question> getAllQuestionsByHumanAnatomyId(@PathVariable(name = "humanAnatomyId") Long humanAnatomyId, Pageable pageable) {
+    public List<Question> getAllQuestionsByHumanAnatomyId(@PathVariable(name = "humanAnatomyId") Long humanAnatomyId) {
         return questionService.getAllQuestionsByHumanAnatomy(humanAnatomyId);
     }
 
