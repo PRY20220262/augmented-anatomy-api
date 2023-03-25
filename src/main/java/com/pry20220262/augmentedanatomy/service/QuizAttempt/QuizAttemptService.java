@@ -5,5 +5,5 @@ import com.pry20220262.augmentedanatomy.model.QuizAttempt;
 import java.util.Optional;
 
 public interface QuizAttemptService {
-    QuizAttempt createQuizAttempt(Long userId, QuizAttempt quizAttempt);
+    public QuizAttempt createQuizAttempt(Long userId, Long human_anatomy_id, QuizAttempt quizAttempt);
 }

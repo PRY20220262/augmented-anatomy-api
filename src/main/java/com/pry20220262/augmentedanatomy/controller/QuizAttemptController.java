@@ -22,16 +22,18 @@ public class QuizAttemptController {
     @Autowired
     ModelMapper mapper;
 
-    @PostMapping("/users/{userId}/quizAttempt")
-    public QuizAttemptResource createQuizAttempt(@PathVariable(name = "userId") Long userId, @Valid @RequestBody SaveQuizAttemptResource resource) {
-        return convertToResource(quizAttemptService.createQuizAttempt(userId, convertToEntity(resource)));
+    @PostMapping("/users/{userId}/humanAnatomy/{humanAnatomyId}/quizAttempt")
+    public QuizAttemptResource createQuizAttempt(@PathVariable(name = "userId") Long userId, @PathVariable(name = "humanAnatomyId") Long humanAnatomyId) {
+        QuizAttempt quizAttempt = new QuizAttempt();
+        quizAttempt = quizAttemptService.createQuizAttempt(userId, humanAnatomyId, quizAttempt);
+        return convertToResource(quizAttempt);
     }
 
     private QuizAttempt convertToEntity(SaveQuizAttemptResource resource){
         return mapper.map(resource, QuizAttempt.class);
     }
 
-    private QuizAttemptResource convertToResource(QuizAttempt entity){
+    private QuizAttemptResource convertToResource(QuizAttempt entity) {
         return mapper.map(entity, QuizAttemptResource.class);
     }
 
