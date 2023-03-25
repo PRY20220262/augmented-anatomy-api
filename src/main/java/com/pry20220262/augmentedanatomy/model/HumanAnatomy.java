@@ -1,5 +1,6 @@
 package com.pry20220262.augmentedanatomy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,18 +20,20 @@ public class HumanAnatomy {
     @NotNull
     private String name;
 
-    private int organs_number;
+    private int organsNumber;
 
     @NotBlank
     @NotNull
-    private String short_detail;
+    private String shortDetail;
 
     @Lob
     @NotBlank
     @NotNull
     private String detail;
 
+    //TODO: REVISAR JSONIGNORE CUANDO SE USE DTO
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private HumanAnatomy parent;
 }

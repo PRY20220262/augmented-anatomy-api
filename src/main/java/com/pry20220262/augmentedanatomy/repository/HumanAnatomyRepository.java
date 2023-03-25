@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface HumanAnatomyRepository extends JpaRepository<HumanAnatomy, Long> {
-    String QUERY_FIND_ALL_NO_PARENT = "SELECT u FROM HumanAnatomy u WHERE u.parent = NULL ";
-    @Query(value = QUERY_FIND_ALL_NO_PARENT)
+    String QUERY_FIND_ALL_ORGANS = "SELECT u FROM HumanAnatomy u WHERE u.parent != NULL ";
+    @Query(value = QUERY_FIND_ALL_ORGANS)
     List<HumanAnatomy> findAllOrgans();
 }
