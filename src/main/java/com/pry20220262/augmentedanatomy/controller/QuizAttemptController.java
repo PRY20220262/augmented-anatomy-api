@@ -42,6 +42,11 @@ public class QuizAttemptController {
         return quizAttemptService.getAllQuizAttemptByUserId(userId);
     }
 
+    @PutMapping("quizAttempts/{quizAttemptId}/score/{score}")
+    public QuizAttemptResource updateQuizAttemptScore(@PathVariable(name = "quizAttemptId") Long userId, @PathVariable(name = "score") Double score) {
+        return convertToResource(quizAttemptService.updateScoreQuizAttempt(userId, score));
+    }
+
     private QuizAttempt convertToEntity(SaveQuizAttemptResource resource){
         return mapper.map(resource, QuizAttempt.class);
     }

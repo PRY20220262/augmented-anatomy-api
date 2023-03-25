@@ -3,6 +3,7 @@ package com.pry20220262.augmentedanatomy.service.QuizAttempt;
 import com.pry20220262.augmentedanatomy.exception.Error;
 import com.pry20220262.augmentedanatomy.exception.ServiceException;
 import com.pry20220262.augmentedanatomy.model.HumanAnatomy;
+import com.pry20220262.augmentedanatomy.model.Note;
 import com.pry20220262.augmentedanatomy.model.Question;
 import com.pry20220262.augmentedanatomy.model.QuizAttempt;
 import com.pry20220262.augmentedanatomy.repository.HumanAnatomyRepository;
@@ -43,5 +44,13 @@ public class QuizAttemptServiceImpl implements QuizAttemptService{
     @Override
     public List<QuizAttempt> getAllQuizAttemptByHumanAnatomyId(Long humanAnatomyId) {
         return quizAttemptRepository.findByHumanAnatomyId(humanAnatomyId);
+    }
+
+    @Override
+    public QuizAttempt updateScoreQuizAttempt(Long quizAttemptId, Double score) {
+        return quizAttemptRepository.findById(quizAttemptId).map(quizAttempt -> {
+            quizAttempt.setScore(score);
+            return quizAttemptRepository.save(quizAttempt);
+        }).orElseThrow(() -> new ServiceException(Error.DATA_NOT_FOUND));
     }
 }

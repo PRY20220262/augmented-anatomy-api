@@ -11,7 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.Random;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
@@ -32,6 +36,26 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public List<Question> getAllQuestionsByHumanAnatomy(Long humanAnatomyId) {
         return questionRepository.findByHumanAnatomyId(humanAnatomyId);
+    }
+
+    @Override
+    public List<Question> getRandomQuestionsByHumanAnatomyId(Long humanAnatomyId) {
+        List<Question> allQuestions =  questionRepository.findByHumanAnatomyId(humanAnatomyId);
+        if (allQuestions.size() > 5){
+            List<Question> selectedQuestions = new ArrayList<>();
+            Set<Integer> selectedIndexes = new HashSet<>();
+            Random random = new Random();
+            while (selectedIndexes.size() < 5) {
+                int index = random.nextInt(allQuestions.size());
+                if (!selectedIndexes.contains(index)) {
+                    selectedIndexes.add(index);
+                    selectedQuestions.add(allQuestions.get(index));
+                }
+            }
+            return selectedQuestions;
+        } else {
+            return questionRepository.findByHumanAnatomyId(humanAnatomyId);
+        }
     }
 
     @Override

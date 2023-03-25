@@ -9,5 +9,6 @@ import java.util.List;
 public interface QuestionService {
     Question createQuestion(Long humanAnatomyId, Question question);
     List<Question> getAllQuestionsByHumanAnatomy(Long humanAnatomyId);
+    List<Question> getRandomQuestionsByHumanAnatomyId(Long humanAnatomyId);
     Page<Question> getAllQuestions(Pageable pageable);
 }

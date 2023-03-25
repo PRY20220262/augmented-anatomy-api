@@ -2,6 +2,7 @@ package com.pry20220262.augmentedanatomy.service.QuestionChoice;
 
 import com.pry20220262.augmentedanatomy.exception.Error;
 import com.pry20220262.augmentedanatomy.exception.ServiceException;
+import com.pry20220262.augmentedanatomy.model.Note;
 import com.pry20220262.augmentedanatomy.model.QuestionChoice;
 import com.pry20220262.augmentedanatomy.repository.QuestionChoiceRepository;
 import com.pry20220262.augmentedanatomy.repository.QuestionRepository;
@@ -30,5 +31,16 @@ public class QuestionChoiceImpl implements QuestionChoiceSerivce{
     @Override
     public Page<QuestionChoice> getAllQuestionsChoicebyQuestionId(Long questionId, Pageable pageable) {
         return questionChoiceRepository.findByQuestionId(questionId, pageable);
+    }
+
+    @Override
+    public QuestionChoice updateQuestionChoiceByQuestionId(Long questionId, Long questionChoiceId, QuestionChoice questionChoiceRequest) {
+        return questionRepository.findById(questionId).map(question -> {
+            QuestionChoice questionChoice = questionChoiceRepository.findById(questionChoiceId).orElseThrow(()-> new ServiceException(Error.DATA_NOT_FOUND));
+            questionChoice.setChoice(questionChoiceRequest.getChoice());
+            questionChoice.setIsCorrect(questionChoiceRequest.getIsCorrect());
+            questionChoice.setQuestion(question);
+            return questionChoiceRepository.save(questionChoice);
+        }).orElseThrow(() -> new ServiceException(Error.DATA_NOT_FOUND));
     }
 }
