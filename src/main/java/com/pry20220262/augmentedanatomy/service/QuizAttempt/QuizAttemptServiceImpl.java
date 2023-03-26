@@ -2,16 +2,14 @@ package com.pry20220262.augmentedanatomy.service.QuizAttempt;
 
 import com.pry20220262.augmentedanatomy.exception.Error;
 import com.pry20220262.augmentedanatomy.exception.ServiceException;
-import com.pry20220262.augmentedanatomy.model.HumanAnatomy;
-import com.pry20220262.augmentedanatomy.model.Note;
-import com.pry20220262.augmentedanatomy.model.Question;
-import com.pry20220262.augmentedanatomy.model.QuizAttempt;
+import com.pry20220262.augmentedanatomy.model.*;
 import com.pry20220262.augmentedanatomy.repository.HumanAnatomyRepository;
 import com.pry20220262.augmentedanatomy.repository.QuizAttemptRepository;
 import com.pry20220262.augmentedanatomy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -52,5 +50,20 @@ public class QuizAttemptServiceImpl implements QuizAttemptService{
             quizAttempt.setScore(score);
             return quizAttemptRepository.save(quizAttempt);
         }).orElseThrow(() -> new ServiceException(Error.DATA_NOT_FOUND));
+    }
+
+    @Override
+    public List<QuizAttemptInfo> getAllQuizAttemptInfoByUserId(Long userId) {
+        List<QuizAttempt> quizAttemptsList = quizAttemptRepository.findByUserId(userId);
+        List<QuizAttemptInfo> quizAttemptInfoList = new ArrayList<>();
+        for (QuizAttempt quizAttempt: quizAttemptsList){
+            QuizAttemptInfo quizAttemptInfo = new QuizAttemptInfo();
+            quizAttemptInfo.setId(quizAttempt.getId());
+            quizAttemptInfo.setScore(quizAttempt.getScore());
+            quizAttemptInfo.setHumanAnatomyId(quizAttempt.getHumanAnatomy().getId());
+            quizAttemptInfo.setNameHumanAnatomy(quizAttempt.getHumanAnatomy().getName());
+            quizAttemptInfoList.add(quizAttemptInfo);
+        }
+        return quizAttemptInfoList;
     }
 }
