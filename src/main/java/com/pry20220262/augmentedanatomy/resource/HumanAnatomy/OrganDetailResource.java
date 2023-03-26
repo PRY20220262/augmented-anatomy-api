@@ -2,8 +2,11 @@ package com.pry20220262.augmentedanatomy.resource.HumanAnatomy;
 
 
 import com.pry20220262.augmentedanatomy.model.Characteristic;
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class OrganDetailResource {
     private Long id;
 

@@ -15,5 +15,6 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     String QUERY_GET_SHORT_IMAGE = "SELECT u FROM Image u WHERE u.humanAnatomy.id = :id AND " +
             "u.type = :type";
     @Query(value = QUERY_GET_SHORT_IMAGE)
-    Optional<Image> getShortImage(@Param("type") ImageType type, @Param("id") Long id);
+    Optional<Image> getByTypeAndHumanAnatomyId(@Param("type") ImageType type, @Param("id") Long id);
+
 }
