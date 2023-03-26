@@ -2,10 +2,13 @@ package com.pry20220262.augmentedanatomy.service.HumanAnatomy;
 
 import com.pry20220262.augmentedanatomy.exception.Error;
 import com.pry20220262.augmentedanatomy.exception.ServiceException;
+import com.pry20220262.augmentedanatomy.model.Characteristic;
 import com.pry20220262.augmentedanatomy.model.HumanAnatomy;
 import com.pry20220262.augmentedanatomy.model.Image;
+import com.pry20220262.augmentedanatomy.repository.CharacteristicRepository;
 import com.pry20220262.augmentedanatomy.repository.HumanAnatomyRepository;
 import com.pry20220262.augmentedanatomy.repository.ImageRepository;
+import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.HumanAnatomyDetailResource;
 import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganSaveResource;
 import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganListResource;
 import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.SystemSaveResource;
@@ -26,6 +29,9 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
     @Autowired
     private ImageRepository imageRepository;
 
+    @Autowired
+    private CharacteristicRepository characteristicRepository;
+
     private HumanAnatomy findById(Long id) {
         return humanAnatomyRepository.findById(id).orElseThrow(() -> new ServiceException(Error.ELEMENT_DOES_NOT_EXIST));
     }
@@ -41,7 +47,7 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
             dto.setName(o.getName());
             dto.setShortDetail(o.getShortDetail());
 
-            Optional<Image> shortImage = imageRepository.getShortImage(ImageType.SHORT_IMAGE, o.getId());
+            Optional<Image> shortImage = imageRepository.getByTypeAndHumanAnatomyId(ImageType.SHORT_IMAGE, o.getId());
             if (shortImage.isEmpty()) throw new ServiceException(Error.ELEMENT_DOES_NOT_EXIST);
 
             dto.setImage(shortImage.get().getUrl());
@@ -51,6 +57,26 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
 
 
         if (response.isEmpty()) throw new ServiceException(Error.LIST_IS_EMPTY);
+        return response;
+    }
+
+    @Override
+    public HumanAnatomyDetailResource getById(Long id) {
+
+        HumanAnatomy organ = findById(id);
+        HumanAnatomyDetailResource response = new HumanAnatomyDetailResource();
+
+        response.setId(organ.getId());
+        response.setDetail(organ.getDetail());
+        response.setName(organ.getName());
+
+        Optional<Image> image = imageRepository.getByTypeAndHumanAnatomyId(ImageType.LONG_IMAGE, id);
+        if (image.isEmpty()) throw new ServiceException(Error.ELEMENT_DOES_NOT_EXIST);
+        response.setImage(image.get().getUrl());
+
+        List<Characteristic> characteristics = characteristicRepository.findByHumanAnatomyId(id);
+        response.setCharacteristics(characteristics);
+
         return response;
     }
 
