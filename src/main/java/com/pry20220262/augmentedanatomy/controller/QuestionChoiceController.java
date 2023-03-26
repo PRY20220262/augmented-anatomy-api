@@ -1,6 +1,7 @@
 package com.pry20220262.augmentedanatomy.controller;
 
 import com.pry20220262.augmentedanatomy.model.QuestionChoice;
+import com.pry20220262.augmentedanatomy.repository.QuestionChoiceRepository;
 import com.pry20220262.augmentedanatomy.resource.Note.NoteResource;
 import com.pry20220262.augmentedanatomy.resource.Note.SaveNoteResource;
 import com.pry20220262.augmentedanatomy.resource.QuestionChoice.QuestionChoiceResource;
@@ -25,6 +26,8 @@ public class QuestionChoiceController {
 
     @Autowired
     ModelMapper mapper;
+    @Autowired
+    private QuestionChoiceRepository questionChoiceRepository;
 
     @PostMapping("/questions/{questionId}/questions-choice")
     public QuestionChoiceResource createQuestionChoice(@PathVariable(name = "questionId") Long questionId, @Valid @RequestBody SaveQuestionChoiceResource resource) {
@@ -41,6 +44,16 @@ public class QuestionChoiceController {
     @PutMapping("/questions/{questionId}/questions-choice/{questionChoiceId}")
     public QuestionChoiceResource updateQuestionChoice(@PathVariable(name = "questionId") Long questionId, @PathVariable(name = "questionChoiceId") Long questionChoiceId, @Valid @RequestBody SaveQuestionChoiceResource resource) {
         return convertToResource(questionChoiceSerivce.updateQuestionChoiceByQuestionId(questionId, questionChoiceId, convertToEntity(resource)));
+    }
+
+    @GetMapping("quizAttempt/{quizAttemptId}/questions/{questionId}/questions-choice/{questionChoiceId}")
+    public Boolean validateSelectedQuestionChoiceAndUpdateScore(@PathVariable(name = "questionId") Long questionId, @PathVariable(name = "questionChoiceId") Long questionChoiceId, @PathVariable(name = "quizAttemptId") Long quizAttemptId) {
+       return questionChoiceSerivce.validateSelectedQuestionChoiceAndUpdateScore(questionId, questionChoiceId, quizAttemptId);
+    }
+
+    @GetMapping("questions/{questionId}/questions-choice/{questionChoiceId}")
+    public Boolean validateRightQuestionChoice(@PathVariable(name = "questionId") Long questionId, @PathVariable(name = "questionChoiceId") Long questionChoiceId) {
+        return questionChoiceSerivce.validateSelectedQuestionChoice(questionId, questionChoiceId);
     }
 
     private QuestionChoice convertToEntity(SaveQuestionChoiceResource resource){

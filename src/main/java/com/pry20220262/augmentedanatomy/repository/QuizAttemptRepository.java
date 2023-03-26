@@ -17,4 +17,5 @@ public interface QuizAttemptRepository extends JpaRepository<QuizAttempt, Long> 
     List<QuizAttempt> findByHumanAnatomyId(Long humanAnatomyId);
 
     Optional<QuizAttempt> findByIdAndUserId(Long id, Long userId);
+    Optional<QuizAttempt> findByIdAndHumanAnatomyId(Long id, Long humanAnatomyId);
 }
