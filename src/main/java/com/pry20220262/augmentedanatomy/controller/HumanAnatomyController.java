@@ -1,7 +1,7 @@
 package com.pry20220262.augmentedanatomy.controller;
 
 import com.pry20220262.augmentedanatomy.model.HumanAnatomy;
-import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganDetailResource;
+import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.HumanAnatomyDetailResource;
 import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganSaveResource;
 import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganListResource;
 import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.SystemSaveResource;
@@ -16,17 +16,20 @@ public class HumanAnatomyController {
     @Autowired
     HumanAnatomyService humanAnatomyService;
 
+    //SE PUEDE REUTILIZAR PARA ORGANOS Y SISTEMAS
+    //getSystemById
+    //getOrganById
+    @GetMapping("/human-anatomy/{id}")
+    public HumanAnatomyDetailResource getById(@PathVariable(name = "id") Long id) {
+        return humanAnatomyService.getById(id);
+    }
+
     //ORGANOS
     @GetMapping("/organs")
     public List<OrganListResource> findAllOrgans() {
         return humanAnatomyService.findOrgans();
     }
 
-    //se puede reutilizar para organos y sistemas
-    @GetMapping("/organs/{id}")
-    public OrganDetailResource getById(@PathVariable(name = "id") Long id) {
-        return humanAnatomyService.getById(id);
-    }
 
     @PostMapping("systems/{id}/organs")
     //TODO: ACTUALIZAR HUMAN BODY POR RESOURCE QUE SE REQUIERA EN FRONT (imagen, modelo, caracteristicas, etc)

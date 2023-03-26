@@ -8,7 +8,7 @@ import com.pry20220262.augmentedanatomy.model.Image;
 import com.pry20220262.augmentedanatomy.repository.CharacteristicRepository;
 import com.pry20220262.augmentedanatomy.repository.HumanAnatomyRepository;
 import com.pry20220262.augmentedanatomy.repository.ImageRepository;
-import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganDetailResource;
+import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.HumanAnatomyDetailResource;
 import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganSaveResource;
 import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganListResource;
 import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.SystemSaveResource;
@@ -61,10 +61,10 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
     }
 
     @Override
-    public OrganDetailResource getById(Long id) {
+    public HumanAnatomyDetailResource getById(Long id) {
 
         HumanAnatomy organ = findById(id);
-        OrganDetailResource response = new OrganDetailResource();
+        HumanAnatomyDetailResource response = new HumanAnatomyDetailResource();
 
         response.setId(organ.getId());
         response.setDetail(organ.getDetail());

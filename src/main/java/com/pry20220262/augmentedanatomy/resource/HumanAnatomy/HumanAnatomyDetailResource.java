@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class OrganDetailResource {
+public class HumanAnatomyDetailResource {
     private Long id;
 
     private String name;
