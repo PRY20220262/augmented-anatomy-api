@@ -69,9 +69,10 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
         response.setId(organ.getId());
         response.setDetail(organ.getDetail());
         response.setName(organ.getName());
+        response.setHasGender(organ.isHasGender());
 
         Optional<Image> image = imageRepository.getByTypeAndHumanAnatomyId(ImageType.LONG_IMAGE, id);
-        if (image.isEmpty()) throw new ServiceException(Error.ELEMENT_DOES_NOT_EXIST);
+        if (image.isEmpty()) throw new ServiceException(Error.IMAGE_DOES_NOT_EXIST);
         response.setImage(image.get().getUrl());
 
         List<Characteristic> characteristics = characteristicRepository.findByHumanAnatomyId(id);
@@ -96,6 +97,7 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
         organ.setName(resource.getName());
         organ.setDetail(resource.getDetail());
         organ.setShortDetail(resource.getShortDetail());
+        organ.setHasGender(resource.isHasGender());
 
         HumanAnatomy parent = findById(resource.getParentId());
         organ.setParent(parent);

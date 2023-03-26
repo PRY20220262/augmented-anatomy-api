@@ -22,6 +22,8 @@ public class HumanAnatomy {
 
     private int organsNumber;
 
+    private boolean hasGender = false;
+
     @NotBlank
     @NotNull
     private String shortDetail;

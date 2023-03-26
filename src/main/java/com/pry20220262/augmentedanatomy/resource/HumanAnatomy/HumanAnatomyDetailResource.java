@@ -16,6 +16,8 @@ public class HumanAnatomyDetailResource {
 
     private String image;
 
+    private boolean hasGender;
+
     private List<Characteristic> characteristics;
 
     // TODO: AGREGAR LISTA DE REFERENCIAS

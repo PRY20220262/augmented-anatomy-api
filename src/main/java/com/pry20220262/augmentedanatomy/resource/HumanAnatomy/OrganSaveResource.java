@@ -20,6 +20,8 @@ public class OrganSaveResource {
     @NotBlank(message = "Detail cannot be null")
     private String detail;
 
+    private boolean hasGender;
+
     @NotNull(message = "Parent cannot be null")
     private Long parentId;
 
