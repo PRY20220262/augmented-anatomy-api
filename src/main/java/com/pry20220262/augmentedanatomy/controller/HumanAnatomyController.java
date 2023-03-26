@@ -17,7 +17,6 @@ public class HumanAnatomyController {
 
     //ORGANOS
     @GetMapping("/organs")
-    //TODO: ACTUALIZAR HUMAN BODY POR RESOURCE QUE SE REQUIERA EN FRONT (imagen, modelo, caracteristicas, etc)
     public List<OrganListResource> findAllOrgans() {
         return humanAnatomyService.findOrgans();
     }
