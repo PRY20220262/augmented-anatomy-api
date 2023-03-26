@@ -3,14 +3,19 @@ package com.pry20220262.augmentedanatomy.service.HumanAnatomy;
 import com.pry20220262.augmentedanatomy.exception.Error;
 import com.pry20220262.augmentedanatomy.exception.ServiceException;
 import com.pry20220262.augmentedanatomy.model.HumanAnatomy;
-import com.pry20220262.augmentedanatomy.model.User;
+import com.pry20220262.augmentedanatomy.model.Image;
 import com.pry20220262.augmentedanatomy.repository.HumanAnatomyRepository;
+import com.pry20220262.augmentedanatomy.repository.ImageRepository;
 import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganSaveResource;
+import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganListResource;
 import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.SystemSaveResource;
+import com.pry20220262.augmentedanatomy.resource.Image.ImageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HumanAnatomyServiceImpl implements HumanAnatomyService {
@@ -18,15 +23,35 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
     @Autowired
     private HumanAnatomyRepository humanAnatomyRepository;
 
+    @Autowired
+    private ImageRepository imageRepository;
+
     private HumanAnatomy findById(Long id) {
         return humanAnatomyRepository.findById(id).orElseThrow(() -> new ServiceException(Error.ELEMENT_DOES_NOT_EXIST));
     }
 
     @Override
-    public List<HumanAnatomy> findOrgans() {
+    public List<OrganListResource> findOrgans() {
         List<HumanAnatomy> organs = humanAnatomyRepository.findAllOrgans();
-        if (organs.isEmpty()) throw new ServiceException(Error.LIST_IS_EMPTY);
-        return organs;
+        List<OrganListResource> response = new ArrayList<>();
+
+        for (HumanAnatomy o : organs) {
+            OrganListResource dto = new OrganListResource();
+            dto.setId(o.getId());
+            dto.setName(o.getName());
+            dto.setShortDetail(o.getShortDetail());
+
+            Optional<Image> shortImage = imageRepository.getShortImage(ImageType.SHORT_IMAGE, o.getId());
+            if (shortImage.isEmpty()) throw new ServiceException(Error.ELEMENT_DOES_NOT_EXIST);
+
+            dto.setImage(shortImage.get().getUrl());
+
+            response.add(dto);
+        }
+
+
+        if (response.isEmpty()) throw new ServiceException(Error.LIST_IS_EMPTY);
+        return response;
     }
 
     @Override
