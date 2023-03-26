@@ -39,9 +39,14 @@ public class QuestionController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
-    @GetMapping("/humanAnatomy/{humanAnatomyId}/questions")
+    @GetMapping("humanAnatomy/{humanAnatomyId}/questions")
     public List<Question> getAllQuestionsByHumanAnatomyId(@PathVariable(name = "humanAnatomyId") Long humanAnatomyId) {
         return questionService.getAllQuestionsByHumanAnatomy(humanAnatomyId);
+    }
+
+    @GetMapping("humanAnatomy/{humanAnatomyId}/randomsQuestions")
+    public List<Question> getRandomQuestionsByHumanAnatomyId(@PathVariable(name = "humanAnatomyId") Long humanAnatomyId) {
+        return questionService.getRandomQuestionsByHumanAnatomyId(humanAnatomyId);
     }
 
     private Question convertToEntity(SaveQuestionResource resource){
