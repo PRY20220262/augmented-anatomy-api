@@ -11,7 +11,8 @@ public enum Error {
     PHOTO_NOT_UPLOADED(1003, "La foto de perfil no se pudo cargar"),
     LIST_IS_EMPTY(1003, "No se han encontrado datos :("),
 
-    ELEMENT_DOES_NOT_EXIST(1003, "No se ha encontrado el elemento :(")
+    ELEMENT_DOES_NOT_EXIST(1003, "No se ha encontrado el elemento :("),
+    IMAGE_DOES_NOT_EXIST(1003, "No se ha encontrado imagen para el elemento :(")
     ;
 
     private final int codError;
