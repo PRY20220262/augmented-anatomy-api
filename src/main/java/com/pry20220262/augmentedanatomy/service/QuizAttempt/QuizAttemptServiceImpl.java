@@ -10,8 +10,9 @@ import com.pry20220262.augmentedanatomy.resource.QuizAttempt.QuizAttemptInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 @Service
 public class QuizAttemptServiceImpl implements QuizAttemptService{
@@ -30,6 +31,9 @@ public class QuizAttemptServiceImpl implements QuizAttemptService{
                 quizAttempt.setUser(user);
                 quizAttempt.setHumanAnatomy(humanAnatomy);
                 quizAttempt.setScore(0.00);
+                LocalDateTime currentDateTime = LocalDateTime.now();
+                Date currentDate = Date.from(currentDateTime.atZone(ZoneId.systemDefault()).toInstant());
+                quizAttempt.setCreated_at(currentDate);
                 return quizAttemptRepository.save(quizAttempt);
             }).orElseThrow(() ->  new ServiceException(Error.DATA_NOT_FOUND));
         }).orElseThrow(() ->  new ServiceException(Error.DATA_NOT_FOUND));
@@ -61,6 +65,7 @@ public class QuizAttemptServiceImpl implements QuizAttemptService{
             QuizAttemptInfo quizAttemptInfo = new QuizAttemptInfo();
             quizAttemptInfo.setId(quizAttempt.getId());
             quizAttemptInfo.setScore(quizAttempt.getScore());
+            quizAttemptInfo.setCreated_at(quizAttempt.getCreated_at());
             quizAttemptInfo.setHumanAnatomyId(quizAttempt.getHumanAnatomy().getId());
             quizAttemptInfo.setNameHumanAnatomy(quizAttempt.getHumanAnatomy().getName());
             quizAttemptInfoList.add(quizAttemptInfo);
