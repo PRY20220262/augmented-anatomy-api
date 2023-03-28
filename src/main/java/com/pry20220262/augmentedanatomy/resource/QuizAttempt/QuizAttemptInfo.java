@@ -1,4 +1,4 @@
-package com.pry20220262.augmentedanatomy.model;
+package com.pry20220262.augmentedanatomy.resource.QuizAttempt;
 
 
 import lombok.Getter;

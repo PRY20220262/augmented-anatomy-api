@@ -6,6 +6,7 @@ import com.pry20220262.augmentedanatomy.model.*;
 import com.pry20220262.augmentedanatomy.repository.HumanAnatomyRepository;
 import com.pry20220262.augmentedanatomy.repository.QuizAttemptRepository;
 import com.pry20220262.augmentedanatomy.repository.UserRepository;
+import com.pry20220262.augmentedanatomy.resource.QuizAttempt.QuizAttemptInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

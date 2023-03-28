@@ -1,6 +1,7 @@
 package com.pry20220262.augmentedanatomy.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pry20220262.augmentedanatomy.resource.Reference.ReferenceType;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,10 +27,8 @@ public class Reference {
     @Size(max = 30)
     private String title;
 
-    @NotBlank
     @NotNull
-    @Size(max = 30)
-    private String fuente;
+    private ReferenceType fuente;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "human_anatomy_id", nullable = false)
