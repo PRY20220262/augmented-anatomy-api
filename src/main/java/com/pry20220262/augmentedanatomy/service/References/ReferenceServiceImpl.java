@@ -45,6 +45,11 @@ public class ReferenceServiceImpl implements ReferenceService{
     }
 
     @Override
+    public List<Reference> getAllReferenceByHumanAnatomyIdAndReferenceType(Long humanAnatomyId, ReferenceType referenceType) {
+        return referenceRepository.findByHumanAnatomyIdAndFuente(humanAnatomyId, referenceType);
+    }
+
+    @Override
     public Reference updateReference(Long humanAnatomyId, Long referenceId, Reference referenceRequest) {
         return humanAnatomyRepository.findById(humanAnatomyId).map(humanAnatomy -> {
             Reference reference = referenceRepository.findById(referenceId).orElseThrow(()-> new ServiceException(Error.DATA_NOT_FOUND));

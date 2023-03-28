@@ -2,6 +2,7 @@ package com.pry20220262.augmentedanatomy.controller;
 
 import com.pry20220262.augmentedanatomy.model.Reference;
 import com.pry20220262.augmentedanatomy.resource.Reference.ReferenceResource;
+import com.pry20220262.augmentedanatomy.resource.Reference.ReferenceType;
 import com.pry20220262.augmentedanatomy.resource.Reference.SaveReferenceResource;
 import com.pry20220262.augmentedanatomy.service.References.ReferenceService;
 import org.modelmapper.ModelMapper;
@@ -37,6 +38,11 @@ public class ReferenceController {
     @GetMapping("humanAnatomy/{humanAnatomyId}/OMSReferences")
     public List<Reference> getAllOMSReferences(@PathVariable(name = "humanAnatomyId") Long humanAnatomyId) {
         return referenceService.getAllOMSReferenceByHumanAnatomyId(humanAnatomyId);
+    }
+
+    @GetMapping("humanAnatomy/{humanAnatomyId}/reference")
+    public List<Reference> getAllReferencesType(@PathVariable(name = "humanAnatomyId") Long humanAnatomyId, @RequestParam(name = "referenceType") ReferenceType referenceType) {
+        return referenceService.getAllReferenceByHumanAnatomyIdAndReferenceType(humanAnatomyId, referenceType);
     }
 
     private Reference convertToEntity(SaveReferenceResource resource){
