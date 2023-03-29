@@ -4,8 +4,11 @@ import com.pry20220262.augmentedanatomy.exception.Error;
 import com.pry20220262.augmentedanatomy.exception.ServiceException;
 import com.pry20220262.augmentedanatomy.model.Note;
 import com.pry20220262.augmentedanatomy.model.Question;
+import com.pry20220262.augmentedanatomy.model.QuestionChoice;
 import com.pry20220262.augmentedanatomy.repository.HumanAnatomyRepository;
+import com.pry20220262.augmentedanatomy.repository.QuestionChoiceRepository;
 import com.pry20220262.augmentedanatomy.repository.QuestionRepository;
+import com.pry20220262.augmentedanatomy.resource.Question.QuestionDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +24,9 @@ import java.util.Random;
 public class QuestionServiceImpl implements QuestionService{
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private QuestionChoiceRepository questionChoiceRepository;
 
     @Autowired
     private HumanAnatomyRepository humanAnatomyRepository;
@@ -41,11 +47,11 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public List<Question> getRandomQuestionsByHumanAnatomyId(Long humanAnatomyId) {
         List<Question> allQuestions =  questionRepository.findByHumanAnatomyId(humanAnatomyId);
-        if (allQuestions.size() > 5){
+        if (allQuestions.size() > 4){
             List<Question> selectedQuestions = new ArrayList<>();
             Set<Integer> selectedIndexes = new HashSet<>();
             Random random = new Random();
-            while (selectedIndexes.size() < 5) {
+            while (selectedIndexes.size() < 4) {
                 int index = random.nextInt(allQuestions.size());
                 if (!selectedIndexes.contains(index)) {
                     selectedIndexes.add(index);
@@ -55,6 +61,33 @@ public class QuestionServiceImpl implements QuestionService{
             return selectedQuestions;
         } else {
             return questionRepository.findByHumanAnatomyId(humanAnatomyId);
+        }
+    }
+
+    @Override
+    public List<QuestionDetail> getRandomQuestionsAndAnswersByHumanAnatomyId(Long humanAnatomyId) {
+        List<Question> allQuestions =  questionRepository.findByHumanAnatomyId(humanAnatomyId);
+        if (allQuestions.size() > 4){
+            List<QuestionDetail> selectedQuestionsDetail = new ArrayList<>();
+            Set<Integer> selectedIndexes = new HashSet<>();
+            Random random = new Random();
+            while (selectedIndexes.size() < 4) {
+                int index = random.nextInt(allQuestions.size());
+                if (!selectedIndexes.contains(index)) {
+                    selectedIndexes.add(index);
+                    Question question = allQuestions.get(index);
+                    QuestionDetail questionDetail = new QuestionDetail();
+                    questionDetail.setId(question.getId());
+                    questionDetail.setTitle(question.getTitle());
+                    List<QuestionChoice> questionChoices = questionChoiceRepository.findByQuestionId(question.getId());
+                    questionDetail.setAnswers(questionChoices);
+                    selectedQuestionsDetail.add(questionDetail);
+                }
+            }
+            return selectedQuestionsDetail;
+        } else {
+            return null;
+            //return questionRepository.findByHumanAnatomyId(humanAnatomyId);
         }
     }
 
