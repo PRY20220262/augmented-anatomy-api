@@ -28,6 +28,7 @@ public class Reference {
     private String title;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private ReferenceType fuente;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

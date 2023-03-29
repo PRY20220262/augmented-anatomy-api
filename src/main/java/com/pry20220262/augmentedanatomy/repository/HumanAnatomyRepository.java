@@ -10,6 +10,10 @@ import java.util.List;
 @Repository
 public interface HumanAnatomyRepository extends JpaRepository<HumanAnatomy, Long> {
     String QUERY_FIND_ALL_ORGANS = "SELECT u FROM HumanAnatomy u WHERE u.parent != NULL ";
+    String QUERY_FIND_ALL_SYSTEMS = "SELECT u FROM HumanAnatomy u WHERE u.parent = NULL ";
     @Query(value = QUERY_FIND_ALL_ORGANS)
     List<HumanAnatomy> findAllOrgans();
+
+    @Query(value = QUERY_FIND_ALL_SYSTEMS)
+    List<HumanAnatomy> findAllSystems();
 }

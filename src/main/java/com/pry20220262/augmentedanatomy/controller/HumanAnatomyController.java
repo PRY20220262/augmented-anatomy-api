@@ -1,10 +1,7 @@
 package com.pry20220262.augmentedanatomy.controller;
 
 import com.pry20220262.augmentedanatomy.model.HumanAnatomy;
-import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.HumanAnatomyDetailResource;
-import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganSaveResource;
-import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganListResource;
-import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.SystemSaveResource;
+import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.*;
 import com.pry20220262.augmentedanatomy.service.HumanAnatomy.HumanAnatomyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +27,10 @@ public class HumanAnatomyController {
         return humanAnatomyService.findOrgans();
     }
 
+    @GetMapping("systems")
+    public List<SystemListResource> findAllSystems() {
+        return humanAnatomyService.findSystems();
+    }
 
     @PostMapping("systems/{id}/organs")
     //TODO: ACTUALIZAR HUMAN BODY POR RESOURCE QUE SE REQUIERA EN FRONT (imagen, modelo, caracteristicas, etc)
