@@ -8,10 +8,7 @@ import com.pry20220262.augmentedanatomy.model.Image;
 import com.pry20220262.augmentedanatomy.repository.CharacteristicRepository;
 import com.pry20220262.augmentedanatomy.repository.HumanAnatomyRepository;
 import com.pry20220262.augmentedanatomy.repository.ImageRepository;
-import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.HumanAnatomyDetailResource;
-import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganSaveResource;
-import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.OrganListResource;
-import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.SystemSaveResource;
+import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.*;
 import com.pry20220262.augmentedanatomy.resource.Image.ImageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +55,25 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
 
         if (response.isEmpty()) throw new ServiceException(Error.LIST_IS_EMPTY);
         return response;
+    }
+
+    @Override
+    public List<SystemListResource> findSystems() {
+        List<HumanAnatomy> systems = humanAnatomyRepository.findAllSystems();
+        List<SystemListResource> systemResponse = new ArrayList<>();
+        for (HumanAnatomy humanAnatomy : systems) {
+            SystemListResource systemListResource = new SystemListResource();
+            systemListResource.setId(humanAnatomy.getId());
+            systemListResource.setName(humanAnatomy.getName());
+            systemListResource.setShortDetail(humanAnatomy.getShortDetail());
+            systemListResource.setOrgansNumber(humanAnatomy.getOrgansNumber());
+            Optional<Image> shortImage = imageRepository.getByTypeAndHumanAnatomyId(ImageType.SHORT_IMAGE, humanAnatomy.getId());
+            if (shortImage.isEmpty()) throw new ServiceException(Error.ELEMENT_DOES_NOT_EXIST);
+            systemListResource.setImage(shortImage.get().getUrl());
+            systemResponse.add(systemListResource);
+        }
+        if (systemResponse.isEmpty()) throw new ServiceException(Error.LIST_IS_EMPTY);
+        return systemResponse;
     }
 
     @Override
