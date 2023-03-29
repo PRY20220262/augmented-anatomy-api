@@ -4,6 +4,7 @@ import com.pry20220262.augmentedanatomy.model.Note;
 import com.pry20220262.augmentedanatomy.model.Question;
 import com.pry20220262.augmentedanatomy.resource.Note.NoteResource;
 import com.pry20220262.augmentedanatomy.resource.Note.SaveNoteResource;
+import com.pry20220262.augmentedanatomy.resource.Question.QuestionDetail;
 import com.pry20220262.augmentedanatomy.resource.Question.QuestionResource;
 import com.pry20220262.augmentedanatomy.resource.Question.SaveQuestionResource;
 import com.pry20220262.augmentedanatomy.service.Question.QuestionService;
@@ -47,6 +48,11 @@ public class QuestionController {
     @GetMapping("humanAnatomy/{humanAnatomyId}/randomsQuestions")
     public List<Question> getRandomQuestionsByHumanAnatomyId(@PathVariable(name = "humanAnatomyId") Long humanAnatomyId) {
         return questionService.getRandomQuestionsByHumanAnatomyId(humanAnatomyId);
+    }
+
+    @GetMapping("humanAnatomy/{humanAnatomyId}/questionsAnswers")
+    public List<QuestionDetail> getQuestionsAnswersByHumanAnatomyId(@PathVariable(name = "humanAnatomyId") Long humanAnatomyId) {
+        return questionService.getRandomQuestionsAndAnswersByHumanAnatomyId(humanAnatomyId);
     }
 
     private Question convertToEntity(SaveQuestionResource resource){
