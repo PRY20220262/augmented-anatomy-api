@@ -6,8 +6,6 @@ import com.pry20220262.augmentedanatomy.resource.Note.SaveNoteResource;
 import com.pry20220262.augmentedanatomy.service.Note.NoteService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +28,9 @@ public class NoteController {
     }
 
     @GetMapping("/users/{userId}/notes")
-    public Page<NoteResource> getAllNotesByUserId(@PathVariable(name = "userId") Long userId, Pageable pageable) {
-        Page<Note> coursePage = noteService.getAllNotesByUserId(userId, pageable);
-        List<NoteResource> resources = coursePage.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
-        return new PageImpl<>(resources, pageable, resources.size());
+    public List<NoteResource> getAllNotesByUserId(@PathVariable(name = "userId") Long userId) {
+        List<Note> coursePage = noteService.getAllNotesByUserId(userId);
+        return coursePage.stream().map(this::convertToResource).collect(Collectors.toList());
     }
 
     @PutMapping("/users/{userId}/notes/{noteId}")

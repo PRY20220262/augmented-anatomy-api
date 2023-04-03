@@ -2,6 +2,7 @@ package com.pry20220262.augmentedanatomy.controller;
 
 import com.pry20220262.augmentedanatomy.model.HumanAnatomy;
 import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.*;
+import com.pry20220262.augmentedanatomy.resource.Menu.MenuResource;
 import com.pry20220262.augmentedanatomy.service.HumanAnatomy.HumanAnatomyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,10 @@ public class HumanAnatomyController {
         return humanAnatomyService.createSystem(resource);
     }
 
+    @GetMapping("/users/{email}/main-menu")
+    public MenuResource getMainMenu(@PathVariable(name = "email") String email) {
+        return humanAnatomyService.mainMenu(email);
+    }
 
 
 }

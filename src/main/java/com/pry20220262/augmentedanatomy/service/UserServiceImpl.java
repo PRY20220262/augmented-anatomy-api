@@ -22,7 +22,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -55,9 +54,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(() -> new ServiceException(Error.USER_NOT_FOUND));
     }
 
-    private User finByEmail(String email) {
+    @Override
+    public User findByEmail(String email) {
         Optional<User> retrievedUser = userRepository.findByEmail(email);
-        if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
+        if (retrievedUser.isEmpty()) throw new ServiceException(Error.USER_NOT_FOUND);
         return retrievedUser.get();
     }
 
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> generatePin(String email) {
 
-        User user = finByEmail(email);
+        User user = findByEmail(email);
         int randomPIN = (int) (Math.random() * 9000) + 1000;
 
         user.setPin(String.valueOf(randomPIN));
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> validatePin(UserPinResource userPinResource) {
         Optional<User> retrievedUser = userRepository.findByPin(userPinResource.getPin());
-        if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
+        if (retrievedUser.isEmpty()) throw new ServiceException(Error.USER_NOT_FOUND);
         User user = retrievedUser.get();
         if (!Objects.equals(user.getEmail(), userPinResource.getEmail()))
             throw new ServiceException(Error.USER_PIN_NOT_MATCH);
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> updatePassword(ChangePasswordResource changePasswordResource) {
-        User user = finByEmail(changePasswordResource.getEmail());
+        User user = findByEmail(changePasswordResource.getEmail());
 
         user.setPassword(passwordEncoder.encode(changePasswordResource.getNewPassword()));
         user.setPin(null);
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> changeOwnPassword(ChangeOwnPasswordResource changePasswordResource) {
-        User user = finByEmail(
+        User user = findByEmail(
                 SecurityContextHolder.getContext().getAuthentication().getName());
 
         if (!passwordEncoder.matches(changePasswordResource.getOldPassword(), user.getPassword()))
