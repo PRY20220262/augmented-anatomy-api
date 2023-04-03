@@ -1,6 +1,7 @@
 package com.pry20220262.augmentedanatomy.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pry20220262.augmentedanatomy.resource.User.UserType;
 import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -25,7 +26,9 @@ public class Profile {
 
     private LocalDate birthDate;
 
-    private Boolean isStudent;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private UserType userType;
 
     //completar con atributo de foto en la web
     private String photoUrl;

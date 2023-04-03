@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 
         Profile profile = new Profile();
         profile.setUser(user);
-        profile.setIsStudent(userSaveResource.getIsStudent());
+        profile.setUserType(userSaveResource.getUserType());
         profile.setFullName(userSaveResource.getFullName());
         profile.setPhone(userSaveResource.getPhone());
 
