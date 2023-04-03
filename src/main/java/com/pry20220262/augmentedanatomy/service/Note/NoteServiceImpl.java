@@ -6,11 +6,10 @@ import com.pry20220262.augmentedanatomy.exception.ServiceException;
 import com.pry20220262.augmentedanatomy.repository.NoteRepository;
 import com.pry20220262.augmentedanatomy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.pry20220262.augmentedanatomy.model.Note;
+import java.util.List;
 
 @Service
 public class NoteServiceImpl implements NoteService
@@ -34,8 +33,8 @@ public class NoteServiceImpl implements NoteService
     }
 
     @Override
-    public Page<Note> getAllNotesByUserId(Long userId, Pageable pageable) {
-        return noteRepository.findByUserId(userId, pageable);
+    public List<Note> getAllNotesByUserId(Long userId) {
+        return noteRepository.findByUserId(userId);
     }
 
     @Override
