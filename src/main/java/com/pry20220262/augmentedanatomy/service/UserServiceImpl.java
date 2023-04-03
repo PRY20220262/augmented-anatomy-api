@@ -22,7 +22,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -57,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     private User finByEmail(String email) {
         Optional<User> retrievedUser = userRepository.findByEmail(email);
-        if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
+        if (retrievedUser.isEmpty()) throw new ServiceException(Error.USER_NOT_FOUND);
         return retrievedUser.get();
     }
 
@@ -108,7 +107,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> validatePin(UserPinResource userPinResource) {
         Optional<User> retrievedUser = userRepository.findByPin(userPinResource.getPin());
-        if (retrievedUser.isEmpty()) throw new UsernameNotFoundException("User not found :(");
+        if (retrievedUser.isEmpty()) throw new ServiceException(Error.USER_NOT_FOUND);
         User user = retrievedUser.get();
         if (!Objects.equals(user.getEmail(), userPinResource.getEmail()))
             throw new ServiceException(Error.USER_PIN_NOT_MATCH);
