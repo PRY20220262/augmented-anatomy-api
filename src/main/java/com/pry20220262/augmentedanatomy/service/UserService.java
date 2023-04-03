@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserService {
     User findById(Long id);
+    User findByEmail(String email);
     User register(UserSaveResource user);
     //podriamos retornar el usuario
     ResponseEntity<?> generatePin(String email);
