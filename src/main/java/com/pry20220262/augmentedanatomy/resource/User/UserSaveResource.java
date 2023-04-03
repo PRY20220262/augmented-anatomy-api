@@ -1,6 +1,9 @@
 package com.pry20220262.augmentedanatomy.resource.User;
 
 import lombok.Data;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -22,7 +25,9 @@ public class UserSaveResource {
     @NotBlank(message = "FullName cannot be null")
     private String fullName;
 
-    private Boolean isStudent;
+    @NotNull(message = "UserType cannot be null")
+    @Enumerated(EnumType.STRING)
+    private UserType userType;
 
 
 }
