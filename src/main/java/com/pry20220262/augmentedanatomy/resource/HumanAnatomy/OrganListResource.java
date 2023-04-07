@@ -12,4 +12,6 @@ public class OrganListResource {
     private String shortDetail;
 
     private String image;
+
+    private String system;
 }
