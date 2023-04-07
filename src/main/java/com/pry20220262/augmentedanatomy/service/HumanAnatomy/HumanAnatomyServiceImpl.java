@@ -63,6 +63,8 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
 
             dto.setImage(shortImage.get().getUrl());
 
+            dto.setSystem(o.getParent().getName());
+
             response.add(dto);
         }
 
