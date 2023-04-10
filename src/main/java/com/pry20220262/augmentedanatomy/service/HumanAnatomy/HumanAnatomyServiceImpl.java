@@ -47,13 +47,13 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
 
 
     @Override
-    public List<OrganListResource> organQuery(OrganQuery query) {
+    public List<OrganResource> organQuery(OrganQuery query) {
 
         List<HumanAnatomy> organs = humanAnatomyRepository.queryOrgan(query.getId(), query.getName(), query.getSystemName());
-        List<OrganListResource> response = new ArrayList<>();
+        List<OrganResource> response = new ArrayList<>();
 
         for (HumanAnatomy o : organs) {
-            OrganListResource dto = new OrganListResource();
+            OrganResource dto = new OrganResource();
             dto.setId(o.getId());
             dto.setName(o.getName());
             dto.setShortDetail(o.getShortDetail());
@@ -72,18 +72,18 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
         if (response.isEmpty()) throw new ServiceException(Error.LIST_IS_EMPTY);
 
         if (Objects.equals(query.getOrder(), "ASC")){
-            response.sort(Comparator.comparing(OrganListResource::getName));
+            response.sort(Comparator.comparing(OrganResource::getName));
         } else if (Objects.equals(query.getOrder(), "DESC")) {
-            response.sort(Comparator.comparing(OrganListResource::getName).reversed());
+            response.sort(Comparator.comparing(OrganResource::getName).reversed());
         }
         return response;
 
     }
 
     @Override
-    public List<SystemListResource> findSystems() {
+    public List<SystemResource> findSystems() {
         List<HumanAnatomy> systems = humanAnatomyRepository.findAllSystems();
-        List<SystemListResource> systemResponse = new ArrayList<>();
+        List<SystemResource> systemResponse = new ArrayList<>();
         for (HumanAnatomy humanAnatomy : systems) {
             systemResponse.add(toSystemListResource(humanAnatomy));
         }
@@ -152,9 +152,9 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
     }
 
 
-    private SystemListResource toSystemListResource(HumanAnatomy humanAnatomy) {
+    private SystemResource toSystemListResource(HumanAnatomy humanAnatomy) {
 
-        SystemListResource systemListResource = new SystemListResource();
+        SystemResource systemListResource = new SystemResource();
 
         systemListResource.setId(humanAnatomy.getId());
         systemListResource.setName(humanAnatomy.getName());

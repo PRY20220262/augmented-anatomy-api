@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface HumanAnatomyService {
 
-    List<OrganListResource> organQuery(OrganQuery query);
+    List<OrganResource> organQuery(OrganQuery query);
 
-    List<SystemListResource> findSystems();
+    List<SystemResource> findSystems();
 
     HumanAnatomyDetailResource getById(Long id);
 

@@ -1,6 +1,6 @@
 package com.pry20220262.augmentedanatomy.resource.Menu;
 
-import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.SystemListResource;
+import com.pry20220262.augmentedanatomy.resource.HumanAnatomy.SystemResource;
 import lombok.Data;
 import java.util.List;
 
@@ -9,9 +9,9 @@ public class MenuResource {
 
     private Long userId;
 
-    private List<SystemListResource> recentActivity;
+    private List<SystemResource> recentActivity;
 
-    private SystemListResource recommendation;
+    private SystemResource recommendation;
 
     private int noteCount;
 
