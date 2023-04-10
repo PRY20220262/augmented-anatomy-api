@@ -18,9 +18,7 @@ import com.pry20220262.augmentedanatomy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class HumanAnatomyServiceImpl implements HumanAnatomyService {
@@ -47,9 +45,11 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
         return humanAnatomyRepository.findById(id).orElseThrow(() -> new ServiceException(Error.ELEMENT_DOES_NOT_EXIST));
     }
 
+
     @Override
-    public List<OrganListResource> findOrgans() {
-        List<HumanAnatomy> organs = humanAnatomyRepository.findAllOrgans();
+    public List<OrganListResource> organQuery(OrganQuery query) {
+
+        List<HumanAnatomy> organs = humanAnatomyRepository.queryOrgan(query.getId(), query.getName(), query.getSystemName());
         List<OrganListResource> response = new ArrayList<>();
 
         for (HumanAnatomy o : organs) {
@@ -70,7 +70,14 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
 
 
         if (response.isEmpty()) throw new ServiceException(Error.LIST_IS_EMPTY);
+
+        if (Objects.equals(query.getOrder(), "ASC")){
+            response.sort(Comparator.comparing(OrganListResource::getName));
+        } else if (Objects.equals(query.getOrder(), "DESC")) {
+            response.sort(Comparator.comparing(OrganListResource::getName).reversed());
+        }
         return response;
+
     }
 
     @Override
@@ -125,7 +132,8 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
 
         HumanAnatomy parent = findById(resource.getParentId());
         organ.setParent(parent);
-        return humanAnatomyRepository.save(organ);    }
+        return humanAnatomyRepository.save(organ);
+    }
 
     @Override
     public MenuResource mainMenu(String email) {
@@ -142,6 +150,7 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
 
         return mainMenu;
     }
+
 
     private SystemListResource toSystemListResource(HumanAnatomy humanAnatomy) {
 

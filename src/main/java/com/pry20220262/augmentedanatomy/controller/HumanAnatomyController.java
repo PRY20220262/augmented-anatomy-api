@@ -23,10 +23,16 @@ public class HumanAnatomyController {
     }
 
     //ORGANOS
+    //@GetMapping("/organs")
+    //public List<OrganListResource> findAllOrgans() {
+    //    return humanAnatomyService.findOrgans();
+    //}
+
     @GetMapping("/organs")
-    public List<OrganListResource> findAllOrgans() {
-        return humanAnatomyService.findOrgans();
+    public List<OrganListResource> organQuery(OrganQuery query) {
+        return humanAnatomyService.organQuery(query);
     }
+
 
     @GetMapping("systems")
     public List<SystemListResource> findAllSystems() {

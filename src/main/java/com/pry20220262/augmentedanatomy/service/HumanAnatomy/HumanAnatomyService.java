@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface HumanAnatomyService {
 
-    List<OrganListResource> findOrgans();
+    List<OrganListResource> organQuery(OrganQuery query);
 
     List<SystemListResource> findSystems();
 
@@ -19,6 +19,7 @@ public interface HumanAnatomyService {
     HumanAnatomy createOrgan(OrganSaveResource organSaveResource);
 
     MenuResource mainMenu(String email);
+
 
 }
 
