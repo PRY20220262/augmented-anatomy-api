@@ -10,7 +10,7 @@ public interface HumanAnatomyService {
 
     List<OrganResource> organQuery(OrganQuery query);
 
-    List<SystemResource> findSystems();
+    List<SystemResource> systemQuery(SystemQuery query);
 
     HumanAnatomyDetailResource getById(Long id);
 

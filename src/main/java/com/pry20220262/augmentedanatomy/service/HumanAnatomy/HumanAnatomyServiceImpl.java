@@ -81,8 +81,8 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
     }
 
     @Override
-    public List<SystemResource> findSystems() {
-        List<HumanAnatomy> systems = humanAnatomyRepository.findAllSystems();
+    public List<SystemResource> systemQuery(SystemQuery query) {
+        List<HumanAnatomy> systems = humanAnatomyRepository.querySystem(query.getId(), query.getName());
         List<SystemResource> systemResponse = new ArrayList<>();
         for (HumanAnatomy humanAnatomy : systems) {
             systemResponse.add(toSystemListResource(humanAnatomy));
@@ -144,7 +144,7 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
 
         mainMenu.setRecommendation(toSystemListResource(findById(1L)));
         mainMenu.setUserId(user.getId());
-        mainMenu.setRecentActivity(findSystems());
+        mainMenu.setRecentActivity(systemQuery(SystemQuery.builder().build()));
         mainMenu.setNoteCount(noteService.getAllNotesByUserId(user.getId()).size());
         mainMenu.setQuizCount(quizAttemptService.getAllQuizAttemptByUserId(user.getId()).size());
 

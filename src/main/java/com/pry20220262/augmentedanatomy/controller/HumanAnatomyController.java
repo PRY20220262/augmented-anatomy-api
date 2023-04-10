@@ -29,8 +29,8 @@ public class HumanAnatomyController {
 
 
     @GetMapping("systems")
-    public List<SystemResource> findAllSystems() {
-        return humanAnatomyService.findSystems();
+    public List<SystemResource> findAllSystems(SystemQuery query) {
+        return humanAnatomyService.systemQuery(query);
     }
 
     @PostMapping("systems/{id}/organs")

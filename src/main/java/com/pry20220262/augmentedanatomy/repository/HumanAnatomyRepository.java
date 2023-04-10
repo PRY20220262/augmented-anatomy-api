@@ -11,17 +11,25 @@ import java.util.List;
 @Repository
 public interface HumanAnatomyRepository extends JpaRepository<HumanAnatomy, Long> {
 
-    String QUERY_FIND_ALL_SYSTEMS = "SELECT u FROM HumanAnatomy u WHERE u.parent = NULL ";
+    String SYSTEM_QUERY = "SELECT u " +
+            " FROM HumanAnatomy u" +
+            " WHERE u.parent = NULL " +
+            " AND (u.id = :id OR :id IS NULL) " +
+            " AND (u.name LIKE CONCAT('%', :name, '%') OR :name IS NULL) ";
 
-    @Query(value = QUERY_FIND_ALL_SYSTEMS)
-    List<HumanAnatomy> findAllSystems();
+    @Query(value = SYSTEM_QUERY)
+    List<HumanAnatomy> querySystem(
+            @Param("id") Long id,
+            @Param("name") String name
+    );
 
-    @Query(value = "SELECT u " +
+    String ORGAN_QUERY = "SELECT u " +
             " FROM HumanAnatomy u" +
             " WHERE u.parent != NULL " +
             " AND (u.id = :id OR :id IS NULL) " +
             " AND (u.name LIKE CONCAT('%', :name, '%') OR :name IS NULL) " +
-            " AND (u.parent.name = :systemName OR :systemName IS NULL) ")
+            " AND (u.parent.name = :systemName OR :systemName IS NULL) ";
+    @Query(value = ORGAN_QUERY)
     List<HumanAnatomy> queryOrgan(
             @Param("id") Long id,
             @Param("name") String name,
