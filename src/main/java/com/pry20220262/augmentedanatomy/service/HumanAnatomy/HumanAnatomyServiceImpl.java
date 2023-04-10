@@ -18,9 +18,7 @@ import com.pry20220262.augmentedanatomy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class HumanAnatomyServiceImpl implements HumanAnatomyService {
@@ -47,13 +45,15 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
         return humanAnatomyRepository.findById(id).orElseThrow(() -> new ServiceException(Error.ELEMENT_DOES_NOT_EXIST));
     }
 
+
     @Override
-    public List<OrganListResource> findOrgans() {
-        List<HumanAnatomy> organs = humanAnatomyRepository.findAllOrgans();
-        List<OrganListResource> response = new ArrayList<>();
+    public List<OrganResource> organQuery(OrganQuery query) {
+
+        List<HumanAnatomy> organs = humanAnatomyRepository.queryOrgan(query.getId(), query.getName(), query.getSystemName());
+        List<OrganResource> response = new ArrayList<>();
 
         for (HumanAnatomy o : organs) {
-            OrganListResource dto = new OrganListResource();
+            OrganResource dto = new OrganResource();
             dto.setId(o.getId());
             dto.setName(o.getName());
             dto.setShortDetail(o.getShortDetail());
@@ -70,13 +70,20 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
 
 
         if (response.isEmpty()) throw new ServiceException(Error.LIST_IS_EMPTY);
+
+        if (Objects.equals(query.getOrder(), "ASC")){
+            response.sort(Comparator.comparing(OrganResource::getName));
+        } else if (Objects.equals(query.getOrder(), "DESC")) {
+            response.sort(Comparator.comparing(OrganResource::getName).reversed());
+        }
         return response;
+
     }
 
     @Override
-    public List<SystemListResource> findSystems() {
-        List<HumanAnatomy> systems = humanAnatomyRepository.findAllSystems();
-        List<SystemListResource> systemResponse = new ArrayList<>();
+    public List<SystemResource> systemQuery(SystemQuery query) {
+        List<HumanAnatomy> systems = humanAnatomyRepository.querySystem(query.getId(), query.getName());
+        List<SystemResource> systemResponse = new ArrayList<>();
         for (HumanAnatomy humanAnatomy : systems) {
             systemResponse.add(toSystemListResource(humanAnatomy));
         }
@@ -125,7 +132,8 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
 
         HumanAnatomy parent = findById(resource.getParentId());
         organ.setParent(parent);
-        return humanAnatomyRepository.save(organ);    }
+        return humanAnatomyRepository.save(organ);
+    }
 
     @Override
     public MenuResource mainMenu(String email) {
@@ -136,16 +144,17 @@ public class HumanAnatomyServiceImpl implements HumanAnatomyService {
 
         mainMenu.setRecommendation(toSystemListResource(findById(1L)));
         mainMenu.setUserId(user.getId());
-        mainMenu.setRecentActivity(findSystems());
+        mainMenu.setRecentActivity(systemQuery(SystemQuery.builder().build()));
         mainMenu.setNoteCount(noteService.getAllNotesByUserId(user.getId()).size());
         mainMenu.setQuizCount(quizAttemptService.getAllQuizAttemptByUserId(user.getId()).size());
 
         return mainMenu;
     }
 
-    private SystemListResource toSystemListResource(HumanAnatomy humanAnatomy) {
 
-        SystemListResource systemListResource = new SystemListResource();
+    private SystemResource toSystemListResource(HumanAnatomy humanAnatomy) {
+
+        SystemResource systemListResource = new SystemResource();
 
         systemListResource.setId(humanAnatomy.getId());
         systemListResource.setName(humanAnatomy.getName());

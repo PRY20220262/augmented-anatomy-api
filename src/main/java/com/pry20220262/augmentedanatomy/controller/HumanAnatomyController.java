@@ -22,15 +22,15 @@ public class HumanAnatomyController {
         return humanAnatomyService.getById(id);
     }
 
-    //ORGANOS
     @GetMapping("/organs")
-    public List<OrganListResource> findAllOrgans() {
-        return humanAnatomyService.findOrgans();
+    public List<OrganResource> organQuery(OrganQuery query) {
+        return humanAnatomyService.organQuery(query);
     }
 
+
     @GetMapping("systems")
-    public List<SystemListResource> findAllSystems() {
-        return humanAnatomyService.findSystems();
+    public List<SystemResource> findAllSystems(SystemQuery query) {
+        return humanAnatomyService.systemQuery(query);
     }
 
     @PostMapping("systems/{id}/organs")
