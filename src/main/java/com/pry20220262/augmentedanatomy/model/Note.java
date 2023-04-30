@@ -26,6 +26,7 @@ public class Note {
 
     @NotBlank
     @NotNull
+    @Lob
     private String detail;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

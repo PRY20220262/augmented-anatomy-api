@@ -26,6 +26,7 @@ public class Model {
 
     @NotBlank
     @NotNull
+    @Lob
     private String detail;
 
     @NotNull
