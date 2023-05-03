@@ -130,6 +130,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseEntity<?> updateProfile(UserProfileSaveResource saveResource, Long id) {
+        User user = findById(
+                id);
+        user.setEmail(saveResource.getEmail());
+        user.getProfile().setPhone(saveResource.getPhone());
+        user.getProfile().setBirthDate(saveResource.getBirthday());
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
     public ResponseEntity<?> changeOwnPassword(ChangeOwnPasswordResource changePasswordResource) {
         User user = findByEmail(
                 SecurityContextHolder.getContext().getAuthentication().getName());
