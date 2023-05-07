@@ -14,11 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
@@ -66,12 +62,12 @@ public class QuestionServiceImpl implements QuestionService{
 
     @Override
     public List<QuestionDetail> getRandomQuestionsAndAnswersByHumanAnatomyId(Long humanAnatomyId) {
-        List<Question> allQuestions =  questionRepository.findByHumanAnatomyId(humanAnatomyId);
-        if (allQuestions.size() > 4){
+        List<Question> allQuestions = questionRepository.findByHumanAnatomyId(humanAnatomyId);
+        if (allQuestions.size() > 4) {
             List<QuestionDetail> selectedQuestionsDetail = new ArrayList<>();
             Set<Integer> selectedIndexes = new HashSet<>();
             Random random = new Random();
-            while (selectedIndexes.size() < 4) {
+            while (selectedIndexes.size() < 5) {
                 int index = random.nextInt(allQuestions.size());
                 if (!selectedIndexes.contains(index)) {
                     selectedIndexes.add(index);
@@ -79,8 +75,10 @@ public class QuestionServiceImpl implements QuestionService{
                     QuestionDetail questionDetail = new QuestionDetail();
                     questionDetail.setId(question.getId());
                     questionDetail.setTitle(question.getTitle());
-                    List<QuestionChoice> questionChoices = questionChoiceRepository.findByQuestionId(question.getId());
-                    questionDetail.setAnswers(questionChoices);
+                    List<QuestionChoice> originalQuestionChoices = questionChoiceRepository.findByQuestionId(question.getId());
+                    List<QuestionChoice> shuffledQuestionChoices = new ArrayList<>(originalQuestionChoices);
+                    Collections.shuffle(shuffledQuestionChoices, random); // mezcla las respuestas de forma aleatoria
+                    questionDetail.setAnswers(shuffledQuestionChoices);
                     selectedQuestionsDetail.add(questionDetail);
                 }
             }
