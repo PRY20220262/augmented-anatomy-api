@@ -1,6 +1,7 @@
 package com.pry20220262.augmentedanatomy.controller;
 
 import com.pry20220262.augmentedanatomy.model.QuizAttempt;
+import com.pry20220262.augmentedanatomy.resource.QuizAttempt.QuizAttemptGroupInfo;
 import com.pry20220262.augmentedanatomy.resource.QuizAttempt.QuizAttemptInfo;
 import com.pry20220262.augmentedanatomy.resource.QuizAttempt.QuizAttemptResource;
 import com.pry20220262.augmentedanatomy.resource.QuizAttempt.SaveQuizAttemptResource;
@@ -42,6 +43,11 @@ public class QuizAttemptController {
     @GetMapping("users/{userId}/quizAttemptsInfo")
     public List<QuizAttemptInfo> getAllQuizInfoByUserId(@PathVariable(name = "userId") Long userId) {
         return quizAttemptService.getAllQuizAttemptInfoByUserId(userId);
+    }
+
+    @GetMapping("users/{userId}/quizAttemptGroupsByHumanAnatomy")
+    public List<QuizAttemptGroupInfo> getAllQuizGroupsByUserId(@PathVariable(name = "userId") Long userId) {
+        return quizAttemptService.getAllQuizAttemptGroupsByUserId(userId);
     }
 
     @PutMapping("quizAttempts/{quizAttemptId}/score/{score}")

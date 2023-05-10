@@ -6,6 +6,7 @@ import com.pry20220262.augmentedanatomy.model.*;
 import com.pry20220262.augmentedanatomy.repository.HumanAnatomyRepository;
 import com.pry20220262.augmentedanatomy.repository.QuizAttemptRepository;
 import com.pry20220262.augmentedanatomy.repository.UserRepository;
+import com.pry20220262.augmentedanatomy.resource.QuizAttempt.QuizAttemptGroupInfo;
 import com.pry20220262.augmentedanatomy.resource.QuizAttempt.QuizAttemptInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class QuizAttemptServiceImpl implements QuizAttemptService{
@@ -71,5 +73,33 @@ public class QuizAttemptServiceImpl implements QuizAttemptService{
             quizAttemptInfoList.add(quizAttemptInfo);
         }
         return quizAttemptInfoList;
+    }
+
+    @Override
+    public List<QuizAttemptGroupInfo> getAllQuizAttemptGroupsByUserId(Long userId) {
+        List<QuizAttempt> quizAttempts = quizAttemptRepository.findByUserId(userId);
+        Map<Long, List<QuizAttempt>> groupedQuizAttempts = quizAttempts.stream()
+                .collect(Collectors.groupingBy(qa -> qa.getHumanAnatomy().getId()));
+
+        List<QuizAttemptGroupInfo> quizAttemptGroups = new ArrayList<>();
+        for (Map.Entry<Long, List<QuizAttempt>> entry : groupedQuizAttempts.entrySet()) {
+            Long humanAnatomyId = entry.getKey();
+            List<QuizAttempt> quizAttemptByHumanAnatomy = entry.getValue();
+            Double maxScore = quizAttemptByHumanAnatomy.stream()
+                    .mapToDouble(QuizAttempt::getScore)
+                    .max()
+                    .orElse(0.0);
+            String nameHumanAnatomy = quizAttemptByHumanAnatomy.get(0).getHumanAnatomy().getName();
+            int countAttempts = quizAttemptByHumanAnatomy.size();
+
+            QuizAttemptGroupInfo quizAttemptGroupInfo = new QuizAttemptGroupInfo();
+            quizAttemptGroupInfo.setHumanAnatomyId(humanAnatomyId);
+            quizAttemptGroupInfo.setNameHumanAnatomy(nameHumanAnatomy);
+            quizAttemptGroupInfo.setMaxScore(maxScore);
+            quizAttemptGroupInfo.setCountAttempts(countAttempts);
+            quizAttemptGroupInfo.setQuizAttemptByHumanAnatomy(quizAttemptByHumanAnatomy);
+            quizAttemptGroups.add(quizAttemptGroupInfo);
+        }
+        return quizAttemptGroups;
     }
 }
