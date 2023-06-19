@@ -1,3 +1,9 @@
+# correr proyecto en local
+1. configuramos variables de entorno de InteliJ
+Run > Edit Configurations > Modify options > Environment variables
+```
+DB_PASSWORD=;DB_URL=jdbc:mysql://arnatomy-db.mysql.database.azure.com:3306/arnatomy?serverTimezone=UTC;DB_USERNAME=arnatomy_admin
+```
 # deploy
 1. Corremos el comando
 ```
