@@ -29,13 +29,13 @@ ENTRYPOINT ["java","-jar","/app.jar"]
 
 3. Realizamos docker build
 ```
-docker build --build-arg DB_URL=jdbc:mysql://arnatomy-db.mysql.database.azure.com:3306/arnatomy?serverTimezone=UTC --build-arg DB_USERNAME=arnatomy_admin --build-arg DB_PASSWORD=Datacenter2023 -t arnatomy-api:1.0 .
+docker build --build-arg DB_URL=jdbc:mysql://arnatomy-db.mysql.database.azure.com:3306/arnatomy?serverTimezone=UTC --build-arg DB_USERNAME=arnatomy_admin --build-arg DB_PASSWORD= -t arnatomy-api:1.0 .
 
 ```
 
 prueba en local:
 ```
-docker run -p 8080:8080 -e DB_URL=jdbc:mysql://arnatomy-db.mysql.database.azure.com:3306/arnatomy?serverTimezone=UTC -e DB_USERNAME=arnatomy_admin -e DB_PASSWORD=Datacenter2023 arnatomy-api:1.0
+docker run -p 8080:8080 -e DB_URL=jdbc:mysql://arnatomy-db.mysql.database.azure.com:3306/arnatomy?serverTimezone=UTC -e DB_USERNAME=arnatomy_admin -e DB_PASSWORD= arnatomy-api:1.0
 ```
 
 4. Push a docker registry
